@@ -7,3 +7,5 @@ class Challenge(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+    def __str__(self):
+        return '{} {}; from {} to {}'.format(self.challenge_id, self.title, self.start_date, self.end_date)
