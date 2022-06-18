@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import ChallengesTable from "../src/components/challengesTable";
+import CreateChallengeForm from "../src/components/createChallengeForm";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -15,10 +16,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Container maxWidth="sm">
-        <ChallengesTable />
-        <Button href="/create_challenge" variant="contained">
-          Create new challenge
-        </Button>
+        <CreateChallengeForm />
       </Container>
     </div>
   );

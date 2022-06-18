@@ -18,7 +18,9 @@ type Challenge = {
 
 export default function ChallengesTable() {
   const { loading, error, value } = useAsync(async () => {
-    return fetch("/api/challenges/").then((response) => response.json());
+    return fetch("/api/challenges/").then(
+      (response) => response.json() as Promise<Challenge[]>
+    );
   }, []);
 
   return (
