@@ -1,9 +1,9 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import { Grommet, Page, PageContent } from 'grommet';
-import ChallengesTable from '../src/components/challengesTable'
-import styles from '../styles/Home.module.css'
+import { Container } from "@mui/material";
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import ChallengesTable from "../src/components/challengesTable";
+import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   return (
@@ -14,16 +14,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-
-      <Grommet plain>
-        <Page kind="narrow">
-          <PageContent background="light-3">
-            <ChallengesTable />
-          </PageContent>
-        </Page>
-      </Grommet>
+      <Container maxWidth="sm">
+        <ChallengesTable />
+      </Container>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
