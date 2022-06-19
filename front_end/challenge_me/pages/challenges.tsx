@@ -1,11 +1,26 @@
 import { Button, Container } from "@mui/material";
-import type { NextPage } from "next";
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage
+} from "next";
 import Head from "next/head";
-import Image from "next/image";
+import Link from "next/link";
+import { getAllChallenges } from "../src/clients";
 import ChallengesTable from "../src/components/challengesTable";
 import styles from "../styles/Home.module.css";
 
-const Home: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {
+      challenges: await getAllChallenges()
+    }
+  };
+};
+
+const Home: NextPage = ({
+  challenges
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -15,10 +30,10 @@ const Home: NextPage = () => {
       </Head>
 
       <Container maxWidth="sm">
-        <ChallengesTable />
-        <Button href="/create_challenge" variant="contained">
-          Create new challenge
-        </Button>
+        <ChallengesTable challenges={challenges} />
+        <Link href="/create_challenge">
+          <Button variant="contained">Create new challenge</Button>
+        </Link>
       </Container>
     </div>
   );

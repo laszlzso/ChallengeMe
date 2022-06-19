@@ -6,23 +6,14 @@ import {
   TableCell,
   TableBody
 } from "@mui/material";
-import React from "react";
-import { useAsync } from "react-use";
+import React, { FC } from "react";
+import { Challenge } from "../../clients";
 
-type Challenge = {
-  challenge_id: number;
-  title: string;
-  start_date: string;
-  end_date: string;
+type Props = {
+  challenges: Challenge[];
 };
 
-export default function ChallengesTable() {
-  const { loading, error, value } = useAsync(async () => {
-    return fetch("/api/challenges/").then(
-      (response) => response.json() as Promise<Challenge[]>
-    );
-  }, []);
-
+const ChallengesTable: FC<Props> = ({ challenges }) => {
   return (
     <TableContainer>
       <Table>
@@ -35,7 +26,7 @@ export default function ChallengesTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {value?.map((row) => (
+          {challenges?.map((row) => (
             <TableRow key={row.challenge_id}>
               <TableCell>
                 <strong>{row.challenge_id}</strong>
@@ -49,4 +40,6 @@ export default function ChallengesTable() {
       </Table>
     </TableContainer>
   );
-}
+};
+
+export default ChallengesTable;
