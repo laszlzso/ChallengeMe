@@ -1,26 +1,40 @@
 import React, { useState } from "react";
-import { Input, FormControl, InputLabel, TextField } from "@mui/material";
+import { TextField, Box } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { useForm, Controller, FieldValues, FieldErrors } from "react-hook-form";
+import {
+  getValidationProps,
+  getValidationPropsWithField
+} from "../../utils/form";
+
+type FormData = {
+  title: string;
+  startDate: Date | null;
+  endDate: Date | null;
+};
 
 export default function CreateChallengeForm() {
-  const [challenge, setChallenge] = useState<{
-    title: string;
-    startDate: Date | null;
-    endDate: Date | null;
-  }>({
-    title: "",
-    startDate: new Date(),
-    endDate: new Date()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    register,
+    getValues
+  } = useForm<FormData>({
+    defaultValues: {
+      title: "",
+      startDate: new Date(),
+      endDate: new Date()
+    }
   });
-  const { title, startDate, endDate } = challenge;
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const onSubmit = () => {
+  const onSubmit = (data: FormData) => {
     setLoading(true);
 
     fetch("/api/challenges/", {
@@ -28,58 +42,92 @@ export default function CreateChallengeForm() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(challenge)
+      body: JSON.stringify(data)
     }).then(() => {
       setLoading(false);
       window.location.assign("/challenges");
     });
   };
 
+  const validateEndDate = (value: FormData["endDate"]) => {
+    const startDate = getValues("startDate");
+    return (
+      !value || !startDate || value >= startDate || "Should be after start date"
+    );
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <h2>Create Your Challenge</h2>
-      <form>
-        <FormControl fullWidth>
-          <InputLabel>Title</InputLabel>
-          <Input
-            value={title}
-            onChange={({ target: { value } }) =>
-              setChallenge({ ...challenge, title: value })
-            }
-          />
-        </FormControl>
-        <FormControl fullWidth style={{ marginTop: 30 }}>
-          <DesktopDatePicker
-            label="Start date"
-            inputFormat="MM/dd/yyyy"
-            value={startDate}
-            onChange={(value) =>
-              setChallenge({ ...challenge, startDate: value })
-            }
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </FormControl>
-        <FormControl fullWidth style={{ marginTop: 30 }}>
-          <DesktopDatePicker
-            label="End date"
-            inputFormat="MM/dd/yyyy"
-            value={endDate}
-            onChange={(value) => setChallenge({ ...challenge, endDate: value })}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </FormControl>
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 2 },
+          "& .MuiButton-root": { m: 2 }
+        }}
+        autoComplete="off"
+      >
+        <TextField
+          {...register("title", { required: true, minLength: 2 })}
+          {...getValidationProps(errors, "title")}
+          fullWidth
+          label="Title"
+          variant="standard"
+        />
+        <Controller
+          name="startDate"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <DesktopDatePicker
+              {...field}
+              label="Start date"
+              inputFormat="MM/dd/yyyy"
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  {...getValidationPropsWithField(errors, field)}
+                  fullWidth
+                  variant="standard"
+                />
+              )}
+            />
+          )}
+        />
+        <Controller
+          name="endDate"
+          control={control}
+          rules={{
+            required: true,
+            validate: validateEndDate
+          }}
+          render={({ field }) => (
+            <DesktopDatePicker
+              {...field}
+              label="End date"
+              inputFormat="MM/dd/yyyy"
+              minDate={getValues("startDate")}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  {...getValidationPropsWithField(errors, field)}
+                  fullWidth
+                  variant="standard"
+                />
+              )}
+            />
+          )}
+        />
         <LoadingButton
-          size="small"
-          onClick={onSubmit}
+          onClick={handleSubmit(onSubmit)}
           endIcon={<SendIcon />}
           loading={loading}
           loadingPosition="end"
           variant="contained"
-          style={{ marginTop: 30 }}
         >
           Create challenge
         </LoadingButton>
-      </form>
+      </Box>
     </LocalizationProvider>
   );
 }

@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import ChallengesTable from "../src/components/challengesTable";
-import { CreateChallengeForm_v2 as CreateChallengeForm } from "../src/components/createChallengeForm";
+import CreateChallengeForm from "../src/components/createChallengeForm";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
