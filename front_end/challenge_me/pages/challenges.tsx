@@ -10,17 +10,7 @@ import { getAllChallenges } from "../src/clients";
 import ChallengesTable from "../src/components/challengesTable";
 import styles from "../styles/Home.module.css";
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: {
-      challenges: await getAllChallenges()
-    }
-  };
-};
-
-const Home: NextPage = ({
-  challenges
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -30,7 +20,7 @@ const Home: NextPage = ({
       </Head>
 
       <Container maxWidth="sm">
-        <ChallengesTable challenges={challenges} />
+        <ChallengesTable />
         <Link href="/create_challenge">
           <Button variant="contained">Create new challenge</Button>
         </Link>

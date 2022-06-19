@@ -5,7 +5,12 @@ export type Challenge = {
   end_date: string;
 };
 
-export const getAllChallenges = async () => {
+export const getAllChallenges_Server = async () => {
   const response = await fetch(process.env.SERVER_URL + "/challenges/");
+  return await (response.json() as Promise<Challenge[]>);
+};
+
+export const getAllChallenges = async () => {
+  const response = await fetch("/api/challenges/");
   return await (response.json() as Promise<Challenge[]>);
 };

@@ -7,13 +7,23 @@ import {
   TableBody
 } from "@mui/material";
 import React, { FC } from "react";
+import { useAsync } from "react-use";
 import { Challenge } from "../../clients";
+import { useFetch } from "../../utils/api";
 
-type Props = {
-  challenges: Challenge[];
-};
+const ChallengesTable: FC = () => {
+  const { fetchAuthenticated } = useFetch();
 
-const ChallengesTable: FC<Props> = ({ challenges }) => {
+  const { loading, error, value } = useAsync(async () => {
+    return fetchAuthenticated("/api/challenges/").then(
+      (response) => response.json() as Promise<Challenge[]>
+    );
+  }, []);
+
+  if (!Array.isArray(value)) {
+    return null;
+  }
+
   return (
     <TableContainer>
       <Table>
@@ -26,7 +36,7 @@ const ChallengesTable: FC<Props> = ({ challenges }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {challenges?.map((row) => (
+          {value?.map((row) => (
             <TableRow key={row.challenge_id}>
               <TableCell>
                 <strong>{row.challenge_id}</strong>

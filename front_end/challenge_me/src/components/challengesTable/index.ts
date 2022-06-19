@@ -1,1 +1,1 @@
-export { default } from './ChallengesTable'
+export { default } from "./ChallengesTable";
