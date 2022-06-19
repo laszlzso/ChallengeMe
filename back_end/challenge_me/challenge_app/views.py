@@ -1,17 +1,21 @@
+from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from .models import Challenge
 from .serializers import ChallengeSerializer
-from datetime import datetime
 
 
 class ChallengeListApiView(APIView):
+    @permission_classes([IsAuthenticated])
     def get(self, request, *args, **kwargs):
         challenges = Challenge.objects.all()
         serializer = ChallengeSerializer(challenges, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @permission_classes([IsAuthenticated])
     def post(self, request, *args, **kwargs):
         data = {
             'title': request.data.get('title'),
@@ -33,6 +37,7 @@ class ChallengeApiView(APIView):
         except Challenge.DoesNotExist:
             return None
 
+    @permission_classes([IsAuthenticated])
     def get(self, request, challenge_id, *args, **kwargs):
         challenge_instance = self.get_object(challenge_id)
         if not challenge_instance:
@@ -44,6 +49,7 @@ class ChallengeApiView(APIView):
         serializer = ChallengeSerializer(challenge_instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @permission_classes([IsAuthenticated])
     def put(self, request, challenge_id, *args, **kwargs):
         challenge_instance = self.get_object(challenge_id)
         if not challenge_instance:
@@ -62,6 +68,7 @@ class ChallengeApiView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @permission_classes([IsAuthenticated])
     def delete(self, request, challenge_id, *args, **kwargs):
         challenge_instance = self.get_object(challenge_id, request.user.id)
         if not challenge_instance:
