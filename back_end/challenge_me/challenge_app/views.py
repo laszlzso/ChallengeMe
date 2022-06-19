@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Challenge
 from .serializers import ChallengeSerializer
+from datetime import datetime
 
 
 class ChallengeListApiView(APIView):
@@ -14,8 +15,8 @@ class ChallengeListApiView(APIView):
     def post(self, request, *args, **kwargs):
         data = {
             'title': request.data.get('title'),
-            'start_date': request.data.get('start_date'),
-            'end_date': request.data.get('start_date')
+            'start_date': datetime.strptime(request.data.get('startDate').split('T')[0], '%Y-%m-%d').date(),
+            'end_date': datetime.strptime(request.data.get('endDate').split('T')[0], '%Y-%m-%d').date()
         }
         serializer = ChallengeSerializer(data=data)
         if serializer.is_valid():
