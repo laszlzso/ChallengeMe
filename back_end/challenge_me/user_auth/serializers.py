@@ -1,7 +1,10 @@
+import logging
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
+
+logger = logging.getLogger('django')
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -10,6 +13,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['username'] = user.username
         token['email'] = user.email
+        logger.info('Token successfully created')
         return token
 
 
@@ -30,6 +34,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {'password': 'Password fields didn\'t match'})
 
+        logger.debug('Registration data validated')
         return attrs
 
     def create(self, validated_data):

@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,12 +8,15 @@ from rest_framework.decorators import permission_classes
 from .models import Challenge
 from .serializers import ChallengeSerializer
 
+logger = logging.getLogger('django')
+
 
 class ChallengeListApiView(APIView):
     @permission_classes([IsAuthenticated])
     def get(self, request, *args, **kwargs):
         challenges = Challenge.objects.all()
         serializer = ChallengeSerializer(challenges, many=True)
+        logger.info('Retrieved %s challenge entries', len(serializer.data))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes([IsAuthenticated])
@@ -42,7 +46,7 @@ class ChallengeApiView(APIView):
         challenge_instance = self.get_object(challenge_id)
         if not challenge_instance:
             return Response(
-                {"res": "Object with challenge id does not exist"},
+                {'res': 'Object with challenge id {} does not exist'.format(challenge_id)},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
