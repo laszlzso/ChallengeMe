@@ -1,3 +1,5 @@
+import { useFetch } from "../utils/api";
+
 export type Challenge = {
   challenge_id: number;
   title: string;
@@ -5,12 +7,28 @@ export type Challenge = {
   end_date: string;
 };
 
-export const getAllChallenges_Server = async () => {
-  const response = await fetch(process.env.SERVER_URL + "/challenges/");
-  return await (response.json() as Promise<Challenge[]>);
-};
+export const useChallengesClient = () => {
+  const { fetchAuthenticated } = useFetch();
 
-export const getAllChallenges = async () => {
-  const response = await fetch("/api/challenges/");
-  return await (response.json() as Promise<Challenge[]>);
+  const getAllChallenges = async () => {
+    const response = await fetchAuthenticated("/api/challenges/");
+    return await (response.json() as Promise<Challenge[]>);
+  };
+
+  const createChallenge = async (data: any) => {
+    // TODO: any???
+    const response = await fetchAuthenticated("/api/challenges/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+    return await (response.json() as Promise<Challenge>);
+  };
+
+  return {
+    getAllChallenges,
+    createChallenge
+  };
 };

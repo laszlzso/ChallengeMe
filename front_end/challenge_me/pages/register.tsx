@@ -7,7 +7,7 @@ function Register() {
   const [password2, setPassword2] = useState("");
   const { registerUser } = useAuthContext();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     registerUser(username, password, password2);
   };

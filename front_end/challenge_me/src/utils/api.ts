@@ -9,7 +9,7 @@ export const useFetch = () => {
 
   const fetchAuthenticated: typeof fetch = async (input, init) => {
     let accessToken = authTokens?.access;
-    const isExpired = dayjs.unix(user?.exp).diff(dayjs()) < 1;
+    const isExpired = user && dayjs.unix(user.exp).diff(dayjs()) < 1;
 
     if (isExpired) {
       const token = await refreshUser();

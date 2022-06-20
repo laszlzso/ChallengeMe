@@ -3,7 +3,7 @@ import { useAuthContext } from "../src/components/authProvider/AuthProvider";
 
 const LoginPage = () => {
   const { loginUser, user } = useAuthContext();
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;

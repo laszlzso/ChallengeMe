@@ -6,7 +6,6 @@ import type {
 } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { getAllChallenges } from "../src/clients";
 import ChallengesTable from "../src/components/challengesTable";
 import styles from "../styles/Home.module.css";
 
