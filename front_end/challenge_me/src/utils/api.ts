@@ -10,7 +10,7 @@ export const useFetch = () => {
       ...init,
       headers: {
         ...init?.headers,
-        Authorization: `Bearer ${authTokens?.access}`
+        Authorization: `JWT ${authTokens?.access}`
       }
     }).then((response) => {
       if (response.status === 401) {
