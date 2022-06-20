@@ -6,10 +6,8 @@ import TopBar from "../src/components/topBar";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <>
-        <TopBar />
-        <Component {...pageProps} />
-      </>
+      <TopBar />
+      <Component {...pageProps} />
     </AuthProvider>
   );
 }

@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, FC, useContext } from "react";
 import jwt_decode from "jwt-decode";
 import { useRouter } from "next/router";
+import dayjs from "dayjs";
 
 const AuthContext = createContext({
   user: {},
@@ -9,7 +10,8 @@ const AuthContext = createContext({
   setAuthTokens: () => {},
   registerUser: () => {},
   loginUser: () => {},
-  logoutUser: () => {}
+  logoutUser: () => {},
+  refreshUser: () => {}
 });
 
 export const useAuthContext = () => {
@@ -17,7 +19,7 @@ export const useAuthContext = () => {
 };
 
 type Props = {
-  children: JSX.Element;
+  children: React.ReactNode;
 };
 
 const AuthProvider: FC<Props> = ({ children }) => {
@@ -87,6 +89,29 @@ const AuthProvider: FC<Props> = ({ children }) => {
     router.push("/login");
   };
 
+  const refreshUser = async () => {
+    const response = await fetch("/api/auth/token/refresh/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        refresh: authTokens.refresh
+      })
+    });
+    const data = await response.json();
+
+    if (response.status === 200) {
+      localStorage.setItem("authTokens", JSON.stringify(data));
+      setAuthTokens(data);
+      setUser(jwt_decode(data.access));
+
+      return data; // TODO: check return type with typescript
+    } else {
+      alert("Something went wrong!");
+    }
+  };
+
   const contextData = {
     user,
     setUser,
@@ -94,7 +119,8 @@ const AuthProvider: FC<Props> = ({ children }) => {
     setAuthTokens,
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    refreshUser
   };
 
   useEffect(() => {
