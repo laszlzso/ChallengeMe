@@ -10,7 +10,11 @@ import {
   getValidationProps,
   getValidationPropsWithField
 } from "../../utils/form";
+<<<<<<< HEAD
 import { NewChallengeShape, useChallengesClient } from "../../clients";
+=======
+import { useChallengesClient } from "../../clients";
+>>>>>>> Refactoring api + react hooks
 
 type FormData = {
   title: string;
@@ -40,7 +44,11 @@ export default function CreateChallengeForm() {
   const onSubmit = (data: FormData) => {
     setLoading(true);
 
+<<<<<<< HEAD
     createChallenge(data as NewChallengeShape).then(() => {
+=======
+    createChallenge(data).then(() => {
+>>>>>>> Refactoring api + react hooks
       setLoading(false);
       window.location.assign("/challenges");
     });
