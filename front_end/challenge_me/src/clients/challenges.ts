@@ -8,12 +8,16 @@ export type Challenge = {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Fixing comments
 export type NewChallengeShape = {
   title: string;
   startDate: Date;
   endDate: Date;
 };
 
+<<<<<<< HEAD
 export const useChallengesClient = () => {
   const { fetchAuthenticated } = useFetch();
 
@@ -34,16 +38,17 @@ export const useChallengesClient = () => {
   };
 
 =======
+=======
+>>>>>>> Fixing comments
 export const useChallengesClient = () => {
   const { fetchAuthenticated } = useFetch();
 
   const getAllChallenges = async () => {
     const response = await fetchAuthenticated("/api/challenges/");
-    return await (response.json() as Promise<Challenge[]>);
+    return (await response.json()) as Challenge[];
   };
 
-  const createChallenge = async (data: any) => {
-    // TODO: any???
+  const createChallenge = async (data: NewChallengeShape) => {
     const response = await fetchAuthenticated("/api/challenges/", {
       method: "POST",
       headers: {
@@ -51,7 +56,7 @@ export const useChallengesClient = () => {
       },
       body: JSON.stringify(data)
     });
-    return await (response.json() as Promise<Challenge>);
+    return (await response.json()) as Challenge;
   };
 
 >>>>>>> Refactoring api + react hooks
