@@ -18,12 +18,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container maxWidth="sm">
-        <ChallengesTable />
-        <Link href="/create_challenge">
-          <Button variant="contained">Create new challenge</Button>
-        </Link>
-      </Container>
+      <ChallengesTable />
+      <Link href="/create_challenge">
+        <Button variant="contained">Create new challenge</Button>
+      </Link>
     </div>
   );
 };

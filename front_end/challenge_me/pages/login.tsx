@@ -1,3 +1,4 @@
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useContext } from "react";
 import { useAuthContext } from "../src/components/authProvider/AuthProvider";
 
@@ -13,13 +14,35 @@ const LoginPage = () => {
   return (
     <section>
       <form onSubmit={handleSubmit}>
-        <h1>Login </h1>
+        <Typography variant="h2" gutterBottom component="div">
+          Login
+        </Typography>
         <hr />
-        <label htmlFor="username">Username</label>
-        <input type="text" id="username" placeholder="Enter Username" />
-        <label htmlFor="password">Password</label>
-        <input type="password" id="password" placeholder="Enter Password" />
-        <button type="submit">Login</button>
+        <Box
+          sx={{
+            "& .MuiTextField-root": { my: 1 },
+            "& .MuiButton-root": { my: 1 }
+          }}
+        >
+          <TextField
+            fullWidth
+            name="username"
+            label="Username"
+            variant="standard"
+          />
+          <TextField
+            fullWidth
+            type="password"
+            name="password"
+            label="Password"
+            variant="standard"
+          />
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button type="submit" variant="contained">
+              Login
+            </Button>
+          </Box>
+        </Box>
       </form>
     </section>
   );
