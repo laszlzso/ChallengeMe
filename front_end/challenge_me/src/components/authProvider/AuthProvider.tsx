@@ -110,7 +110,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
 
-      return data as AuthTokensShape; // TODO: check return type with typescript
+      return data as AuthTokensShape;
     } else {
       throw Error("Something went wrong");
     }

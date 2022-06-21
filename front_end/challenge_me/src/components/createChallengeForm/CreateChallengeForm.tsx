@@ -10,7 +10,7 @@ import {
   getValidationProps,
   getValidationPropsWithField
 } from "../../utils/form";
-import { useChallengesClient } from "../../clients";
+import { NewChallengeShape, useChallengesClient } from "../../clients";
 
 type FormData = {
   title: string;
@@ -40,7 +40,7 @@ export default function CreateChallengeForm() {
   const onSubmit = (data: FormData) => {
     setLoading(true);
 
-    createChallenge(data).then(() => {
+    createChallenge(data as NewChallengeShape).then(() => {
       setLoading(false);
       window.location.assign("/challenges");
     });
