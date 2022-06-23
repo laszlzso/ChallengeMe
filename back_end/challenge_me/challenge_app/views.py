@@ -21,6 +21,7 @@ class ChallengeListApiView(APIView):
 
     @permission_classes([IsAuthenticated])
     def post(self, request, *args, **kwargs):
+        # TODO(laszlzso): move this into serializer
         data = {
             'title': request.data.get('title'),
             'start_date': datetime.strptime(request.data.get('startDate').split('T')[0], '%Y-%m-%d').date(),
