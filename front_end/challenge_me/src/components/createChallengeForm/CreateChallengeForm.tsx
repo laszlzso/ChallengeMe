@@ -10,15 +10,7 @@ import {
   getValidationProps,
   getValidationPropsWithField
 } from "../../utils/form";
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { NewChallengeShape, useChallengesClient } from "../../clients";
-=======
-import { useChallengesClient } from "../../clients";
->>>>>>> Refactoring api + react hooks
-=======
-import { NewChallengeShape, useChallengesClient } from "../../clients";
->>>>>>> Fixing comments
 
 type FormData = {
   title: string;
@@ -48,15 +40,7 @@ export default function CreateChallengeForm() {
   const onSubmit = (data: FormData) => {
     setLoading(true);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     createChallenge(data as NewChallengeShape).then(() => {
-=======
-    createChallenge(data).then(() => {
->>>>>>> Refactoring api + react hooks
-=======
-    createChallenge(data as NewChallengeShape).then(() => {
->>>>>>> Fixing comments
       setLoading(false);
       window.location.assign("/challenges");
     });
