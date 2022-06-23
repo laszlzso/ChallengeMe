@@ -1,18 +1,22 @@
 import { createContext, useState, useEffect, FC, useContext } from "react";
 import jwt_decode from "jwt-decode";
 import { useRouter } from "next/router";
-import dayjs from "dayjs";
 
-const AuthContext = createContext({
-  user: {},
-  setUser: () => {},
-  authTokens: {},
-  setAuthTokens: () => {},
-  registerUser: () => {},
-  loginUser: () => {},
-  logoutUser: () => {},
-  refreshUser: () => {}
-});
+export type UserShape = { exp: number };
+export type AuthTokensShape = { access?: string; refresh?: string };
+
+export type AuthContextShape = {
+  user: UserShape | null;
+  setUser: (user: UserShape) => void;
+  authTokens: AuthTokensShape | null;
+  setAuthTokens: (authTokens: AuthTokensShape) => void;
+  registerUser: (username: string, password: string, password2: string) => void;
+  loginUser: (username: string, password: string) => void;
+  logoutUser: () => void;
+  refreshUser: () => Promise<AuthTokensShape>;
+};
+
+const AuthContext = createContext<AuthContextShape>({} as AuthContextShape);
 
 export const useAuthContext = () => {
   return useContext(AuthContext);
@@ -23,14 +27,14 @@ type Props = {
 };
 
 const AuthProvider: FC<Props> = ({ children }) => {
-  const [authTokens, setAuthTokens] = useState(() =>
+  const [authTokens, setAuthTokens] = useState<AuthTokensShape | null>(() =>
     localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens") || "")
       : null
   );
-  const [user, setUser] = useState(() =>
+  const [user, setUser] = useState<UserShape | null>(() =>
     localStorage.getItem("authTokens")
-      ? jwt_decode(localStorage.getItem("authTokens") || "")
+      ? jwt_decode<UserShape>(localStorage.getItem("authTokens") || "")
       : null
   );
 
@@ -83,8 +87,8 @@ const AuthProvider: FC<Props> = ({ children }) => {
   };
 
   const logoutUser = () => {
-    setAuthTokens(undefined);
-    setUser(undefined);
+    setAuthTokens(null);
+    setUser(null);
     localStorage.removeItem("authTokens");
     router.push("/login");
   };
@@ -96,7 +100,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        refresh: authTokens.refresh
+        refresh: authTokens?.refresh
       })
     });
     const data = await response.json();
@@ -106,9 +110,9 @@ const AuthProvider: FC<Props> = ({ children }) => {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
 
-      return data; // TODO: check return type with typescript
+      return data as AuthTokensShape;
     } else {
-      alert("Something went wrong!");
+      throw Error("Something went wrong");
     }
   };
 
@@ -125,7 +129,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (authTokens) {
-      setUser(jwt_decode(authTokens.access));
+      setUser(jwt_decode(authTokens?.access || ""));
     }
   }, [authTokens]);
 

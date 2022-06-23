@@ -10,6 +10,7 @@ import {
   getValidationProps,
   getValidationPropsWithField
 } from "../../utils/form";
+import { NewChallengeShape, useChallengesClient } from "../../clients";
 
 type FormData = {
   title: string;
@@ -34,16 +35,12 @@ export default function CreateChallengeForm() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const { createChallenge } = useChallengesClient();
+
   const onSubmit = (data: FormData) => {
     setLoading(true);
 
-    fetch("/api/challenges/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    }).then(() => {
+    createChallenge(data as NewChallengeShape).then(() => {
       setLoading(false);
       window.location.assign("/challenges");
     });

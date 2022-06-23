@@ -8,17 +8,12 @@ import {
 } from "@mui/material";
 import React, { FC } from "react";
 import { useAsync } from "react-use";
-import { Challenge } from "../../clients";
-import { useFetch } from "../../utils/api";
+import { useChallengesClient } from "../../clients";
 
 const ChallengesTable: FC = () => {
-  const { fetchAuthenticated } = useFetch();
+  const { getAllChallenges } = useChallengesClient();
 
-  const { loading, error, value } = useAsync(async () => {
-    return fetchAuthenticated("/api/challenges/").then(
-      (response) => response.json() as Promise<Challenge[]>
-    );
-  }, []);
+  const { loading, error, value } = useAsync(getAllChallenges, []);
 
   if (!Array.isArray(value)) {
     return null;
