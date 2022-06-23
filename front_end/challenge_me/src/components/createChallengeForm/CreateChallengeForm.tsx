@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Box } from "@mui/material";
+import { TextField, Box, Typography } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -55,12 +55,14 @@ export default function CreateChallengeForm() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <h2>Create Your Challenge</h2>
+      <Typography variant="h4" gutterBottom component="div">
+        Create Your Challenge
+      </Typography>
       <Box
         component="form"
         sx={{
-          "& .MuiTextField-root": { m: 2 },
-          "& .MuiButton-root": { m: 2 }
+          "& .MuiTextField-root": { mb: 2 },
+          "& .MuiButton-root": { mb: 2 }
         }}
         autoComplete="off"
       >
