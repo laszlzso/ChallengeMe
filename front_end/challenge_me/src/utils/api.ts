@@ -1,18 +1,20 @@
 import { ConstructionOutlined } from "@mui/icons-material";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { useAuthContext } from "../components/authProvider/AuthProvider";
+import {
+  isTokenExpired,
+  useAuthContext
+} from "../components/authProvider/AuthProvider";
 
 export const useFetch = () => {
-  const { user, authTokens, refreshUser } = useAuthContext();
+  const { user, authTokens, refreshToken, logoutUser } = useAuthContext();
   const router = useRouter();
 
   const fetchAuthenticated: typeof fetch = async (input, init) => {
     let accessToken = authTokens?.access;
-    const isExpired = user && dayjs.unix(user.exp).diff(dayjs()) < 1;
 
-    if (isExpired) {
-      const token = await refreshUser();
+    if (isTokenExpired(user)) {
+      const token = await refreshToken();
       accessToken = token?.access;
     }
 
@@ -24,7 +26,7 @@ export const useFetch = () => {
       }
     }).then((response) => {
       if (response.status === 401) {
-        router.replace("/login");
+        logoutUser();
       }
       return response;
     });

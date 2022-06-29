@@ -1,25 +1,29 @@
 import { createContext, useState, useEffect, FC, useContext } from "react";
 import jwt_decode from "jwt-decode";
 import { useRouter } from "next/router";
+import dayjs from "dayjs";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 export type UserShape = { exp: number };
 export type AuthTokensShape = { access?: string; refresh?: string };
 
 export type AuthContextShape = {
   user: UserShape | null;
-  setUser: (user: UserShape) => void;
   authTokens: AuthTokensShape | null;
-  setAuthTokens: (authTokens: AuthTokensShape) => void;
   registerUser: (username: string, password: string, password2: string) => void;
   loginUser: (username: string, password: string) => void;
   logoutUser: () => void;
-  refreshUser: () => Promise<AuthTokensShape>;
+  refreshToken: () => Promise<AuthTokensShape>;
 };
 
 const AuthContext = createContext<AuthContextShape>({} as AuthContextShape);
 
 export const useAuthContext = () => {
   return useContext(AuthContext);
+};
+
+export const isTokenExpired = (user: UserShape | null) => {
+  return user && dayjs.unix(user.exp).diff(dayjs()) < 1;
 };
 
 type Props = {
@@ -93,7 +97,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
     router.push("/login");
   };
 
-  const refreshUser = async () => {
+  const refreshToken = async () => {
     const response = await fetch("/api/auth/token/refresh/", {
       method: "POST",
       headers: {
@@ -111,27 +115,28 @@ const AuthProvider: FC<Props> = ({ children }) => {
       setUser(jwt_decode(data.access));
 
       return data as AuthTokensShape;
+    } else if (response.status === 401) {
+      logoutUser();
+      throw Error("Unable to refresh token: user unauthorized");
     } else {
       throw Error("Something went wrong");
     }
   };
 
+  useEffect(() => {
+    if (isTokenExpired(user)) {
+      refreshToken();
+    }
+  }, []);
+
   const contextData = {
     user,
-    setUser,
     authTokens,
-    setAuthTokens,
     registerUser,
     loginUser,
     logoutUser,
-    refreshUser
+    refreshToken
   };
-
-  useEffect(() => {
-    if (authTokens) {
-      setUser(jwt_decode(authTokens?.access || ""));
-    }
-  }, [authTokens]);
 
   return (
     <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
