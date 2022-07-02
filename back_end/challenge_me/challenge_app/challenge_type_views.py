@@ -52,7 +52,7 @@ class ChallengeTypeApiView(APIView):
         challenge_type_instance = self.get_object(challenge_type_id)
         if not challenge_type_instance:
             return Response(
-                {"res": "Object with challenge type id does not exists"},
+                {'res': 'Object with challenge type id {} does not exist'.format(challenge_type_id)},
                 status=status.HTTP_400_BAD_REQUEST
             )
         serializer = ChallengeTypeSerializer(instance=challenge_type_instance, data=request.data, partial=True)
@@ -63,14 +63,14 @@ class ChallengeTypeApiView(APIView):
 
     @permission_classes([IsAuthenticated])
     def delete(self, request, challenge_type_id, *args, **kwargs):
-        challenge_type_instance = self.get_object(challenge_type_id, request.user.id)
+        challenge_type_instance = self.get_object(challenge_type_id)
         if not challenge_type_instance:
             return Response(
-                {"res": "Object with challenge type id does not exists"},
+                {'res': 'Object with challenge type id {} does not exist'.format(challenge_type_id)},
                 status=status.HTTP_400_BAD_REQUEST
             )
         challenge_type_instance.delete()
         return Response(
-            {"res": "Object deleted!"},
+            {'res': 'Object with challenge type id {} deleted'.format(challenge_type_id)},
             status=status.HTTP_200_OK
         )

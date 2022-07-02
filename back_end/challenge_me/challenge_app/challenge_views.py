@@ -21,7 +21,6 @@ class ChallengeListApiView(APIView):
 
     @permission_classes([IsAuthenticated])
     def post(self, request, *args, **kwargs):
-        # TODO(laszlzso): move this into serializer
         data = {
             'title': request.data.get('title'),
             'start_date': datetime.strptime(request.data.get('startDate').split('T')[0], '%Y-%m-%d').date(),
@@ -59,13 +58,13 @@ class ChallengeApiView(APIView):
         challenge_instance = self.get_object(challenge_id)
         if not challenge_instance:
             return Response(
-                {"res": "Object with challenge id does not exists"},
+                {'res': 'Object with challenge id {} does not exist'.format(challenge_id)},
                 status=status.HTTP_400_BAD_REQUEST
             )
         data = {
             'title': request.data.get('title'),
-            'start_date': request.data.get('start_date'),
-            'end_date': request.data.get('start_date')
+            'start_date': datetime.strptime(request.data.get('startDate').split('T')[0], '%Y-%m-%d').date(),
+            'end_date': datetime.strptime(request.data.get('endDate').split('T')[0], '%Y-%m-%d').date()
         }
         serializer = ChallengeSerializer(instance=challenge_instance, data=data, partial=True)
         if serializer.is_valid():
@@ -75,14 +74,14 @@ class ChallengeApiView(APIView):
 
     @permission_classes([IsAuthenticated])
     def delete(self, request, challenge_id, *args, **kwargs):
-        challenge_instance = self.get_object(challenge_id, request.user.id)
+        challenge_instance = self.get_object(challenge_id)
         if not challenge_instance:
             return Response(
-                {"res": "Object with challenge id does not exists"},
+                {'res': 'Object with challenge id {} does not exist'.format(challenge_id)},
                 status=status.HTTP_400_BAD_REQUEST
             )
         challenge_instance.delete()
         return Response(
-            {"res": "Object deleted!"},
+            {'res': 'Object with challenge id {} deleted'.format(challenge_id)},
             status=status.HTTP_200_OK
         )
