@@ -28,13 +28,15 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if not attrs['username']:
+            logger.info('Username not found in request')
             raise serializers.ValidationError(
                 {'username': 'Invalid username'})
         if attrs['password'] != attrs['password2']:
+            logger.info('Passwords did not match')
             raise serializers.ValidationError(
-                {'password': 'Password fields didn\'t match'})
+                {'password': 'Passwords did not match'})
 
-        logger.debug('Registration data validated')
+        logger.info('Registration data validated')
         return attrs
 
     def create(self, validated_data):
