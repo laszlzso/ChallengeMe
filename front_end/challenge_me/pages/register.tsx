@@ -1,15 +1,24 @@
 import { useAuthContext } from "../src/components/authProvider/AuthProvider";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+
+type ErrorShape = Record<string, string[]>;
 
 const RegisterPage = () => {
   const { registerUser, user } = useAuthContext();
 
-  const handleSubmit = (e: any) => {  // async?
+  const [ errors, setErrors ] = useState<ErrorShape>();
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
     const password2 = e.target.password2.value;
-    username.length > 0 && registerUser(username, password, password2);
+    try {
+      username.length > 0 && await registerUser(username, password, password2);
+    } catch (error) {
+      setErrors(error as ErrorShape);
+    }
   };
 
   return (
@@ -30,6 +39,8 @@ const RegisterPage = () => {
             name="username"
             label="Username"
             variant="standard"
+            error={!!errors?.username}
+            helperText={errors?.username}
           />
           <TextField
             fullWidth
@@ -37,6 +48,8 @@ const RegisterPage = () => {
             name="password"
             label="Password"
             variant="standard"
+            error={!!errors?.password}
+            helperText={errors?.password}
           />
           <TextField
             fullWidth
@@ -44,6 +57,8 @@ const RegisterPage = () => {
             name="password2"
             label="Password again"
             variant="standard"
+            error={!!errors?.password2}
+            helperText={errors?.password2}
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button type="submit" variant="contained">
