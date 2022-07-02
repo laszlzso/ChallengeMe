@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Challenge
+from .models import Challenge, ChallengeType
 
 
 class ChallengeSerializer(serializers.ModelSerializer):
@@ -11,3 +11,9 @@ class ChallengeSerializer(serializers.ModelSerializer):
         if data['start_date'] > data['end_date']:
             raise serializers.ValidationError('Start date must be before end date')
         return data
+
+
+class ChallengeTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChallengeType
+        fields = ['challenge_type_id', 'name', 'unit']

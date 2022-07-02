@@ -17,12 +17,12 @@ class Challenge(models.Model):
 
 
 class ChallengeType(models.Model):
-    type_id = models.AutoField(primary_key=True)
+    challenge_type_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     unit = models.CharField(max_length=50)
 
     def __str__(self):
-        return 'Challenge type #{}: {} ({})'.format(self.type_id, self.name, self.unit)
+        return 'Challenge type #{}: {} ({})'.format(self.challenge_type_id, self.name, self.unit)
 
 
 class ChallengeSchedule(models.Model):
