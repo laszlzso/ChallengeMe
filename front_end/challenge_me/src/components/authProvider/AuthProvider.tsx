@@ -85,6 +85,8 @@ const AuthProvider: FC<Props> = ({ children }) => {
     });
     if (response.status === 201) {
       router.push("/login");
+    } else if (response.status === 400) {
+      throw await response.json();
     } else {
       alert("Something went wrong!");
     }

@@ -1,57 +1,74 @@
-import { useState } from "react";
 import { useAuthContext } from "../src/components/authProvider/AuthProvider";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 
-function Register() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
-  const { registerUser } = useAuthContext();
+type ErrorShape = Record<string, string[]>;
+
+const RegisterPage = () => {
+  const { registerUser, user } = useAuthContext();
+
+  const [ errors, setErrors ] = useState<ErrorShape>();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    registerUser(username, password, password2);
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+    const password2 = e.target.password2.value;
+    try {
+      username.length > 0 && await registerUser(username, password, password2);
+    } catch (error) {
+      setErrors(error as ErrorShape);
+    }
   };
 
   return (
     <section>
       <form onSubmit={handleSubmit}>
-        <h1>Register</h1>
+        <Typography variant="h2" gutterBottom component="div">
+          Register
+        </Typography>
         <hr />
-        <div>
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            required
+        <Box
+          sx={{
+            "& .MuiTextField-root": { my: 1 },
+            "& .MuiButton-root": { my: 1 }
+          }}
+        >
+          <TextField
+            fullWidth
+            name="username"
+            label="Username"
+            variant="standard"
+            error={!!errors?.username}
+            helperText={errors?.username}
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
+          <TextField
+            fullWidth
             type="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
+            name="password"
+            label="Password"
+            variant="standard"
+            error={!!errors?.password}
+            helperText={errors?.password}
           />
-        </div>
-        <div>
-          <label htmlFor="confirm-password">Confirm Password</label>
-          <input
+          <TextField
+            fullWidth
             type="password"
-            id="confirm-password"
-            onChange={(e) => setPassword2(e.target.value)}
-            placeholder="Confirm Password"
-            required
+            name="password2"
+            label="Password again"
+            variant="standard"
+            error={!!errors?.password2}
+            helperText={errors?.password2}
           />
-          <p>{password2 !== password ? "Passwords do not match" : ""}</p>
-        </div>
-        <button>Register</button>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button type="submit" variant="contained">
+              Register
+            </Button>
+          </Box>
+        </Box>
       </form>
     </section>
   );
-}
+};
 
-export default Register;
+export default RegisterPage;
