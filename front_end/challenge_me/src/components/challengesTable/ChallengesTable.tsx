@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React, { FC } from "react";
 import { useAsync } from "react-use";
-import { useChallengesClient } from "../../clients";
+import { useChallengesClient } from "../../clients/challenges";
 
 const ChallengesTable: FC = () => {
   const { getAllChallenges } = useChallengesClient();

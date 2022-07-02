@@ -2,8 +2,8 @@ import { Button, Container } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import ChallengesTable from "../src/components/challengesTable";
-import CreateChallengeForm from "../src/components/createChallengeForm";
+import ChallengesTable from "../src/components/challengesTable/ChallengesTable";
+import CreateChallengeForm from "../src/components/createChallengeForm/CreateChallengeForm";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {

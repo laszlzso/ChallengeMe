@@ -6,7 +6,7 @@ import type {
 } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import ChallengesTable from "../src/components/challengesTable";
+import ChallengesTable from "../src/components/challengesTable/ChallengesTable";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {

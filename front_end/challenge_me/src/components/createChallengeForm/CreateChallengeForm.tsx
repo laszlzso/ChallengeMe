@@ -10,7 +10,10 @@ import {
   getValidationProps,
   getValidationPropsWithField
 } from "../../utils/form";
-import { NewChallengeShape, useChallengesClient } from "../../clients";
+import {
+  NewChallengeShape,
+  useChallengesClient
+} from "../../clients/challenges";
 
 type FormData = {
   title: string;
