@@ -39,7 +39,7 @@ class ChallengeSchedule(models.Model):
         unique_together = ('challenge_id', 'user_id', 'challenge_type_id')
 
     def __str__(self):
-        return 'Challenge schedule #{}: Challenge {}/User {}/Type {}; goal: {}, freq.: {} ({})'.format(
+        return 'Challenge schedule #{}: {}/User {}/{}; goal: {}, freq.: {} ({})'.format(
             self.challenge_schedule_id,
             self.challenge_id,
             self.user_id,
@@ -56,7 +56,8 @@ class ChallengeCompletionEntry(models.Model):
     amount = models.FloatField(validators=[MinValueValidator(0.001)])
 
     def __str__(self):
-        return 'Completion entry #{}: challenge schedule {}, {} ({})'.format(self.challenge_completion_entry_id,
-                                                                             self.challenge_schedule_id,
-                                                                             self.amount,
-                                                                             self.timestamp)
+        return 'Completion entry #{}: {}, {} ({})'.format(self.challenge_completion_entry_id,
+                                                          # TODO(laszlzso): fix this shit (prints the whole schedule object instead of the ID only)
+                                                          self.challenge_schedule_id,
+                                                          self.amount,
+                                                          self.timestamp)

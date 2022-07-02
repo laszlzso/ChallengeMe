@@ -17,6 +17,7 @@ class ChallengeListApiView(APIView):
         challenges = Challenge.objects.all()
         serializer = ChallengeSerializer(challenges, many=True)
         logger.info('Retrieved %s challenge entries', len(serializer.data))
+        logger.info('Request data: %s', str(self.request.user))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes([IsAuthenticated])
