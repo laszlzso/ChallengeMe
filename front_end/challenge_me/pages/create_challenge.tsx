@@ -1,7 +1,14 @@
-import { Button, Container } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useState } from "react";
+import {
+  Challenge,
+  NewChallengeShape,
+  useChallengesClient
+} from "../src/clients/challenges";
+import { NewChallengeScheduleShape } from "../src/clients/challengeSchedules";
 import ChallengesTable from "../src/components/challengesTable/ChallengesTable";
 import CreateChallengeForm from "../src/components/createChallengeForm/CreateChallengeForm";
 import CreateChallengeScheduleForm from "../src/components/createChallengeScheduleForm/CreateChallengeScheduleForm";
@@ -9,6 +16,14 @@ import CreateChallengeTypeForm from "../src/components/createChallengeTypeForm/C
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
+  const [challenge, setChallenge] = useState<Challenge>();
+
+  const { createChallenge } = useChallengesClient();
+
+  const handleCreateChallenge = async (data: NewChallengeShape) => {
+    return createChallenge(data).then((response) => setChallenge(response));
+  };
+
   return (
     <>
       <Head>
@@ -17,9 +32,15 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <CreateChallengeForm />
-      {/* TODO(ricsi): Create challange first, only then show create schedule with challenge_id passed down */}
-      <CreateChallengeScheduleForm />
+      <CreateChallengeForm
+        onCreateChallenge={handleCreateChallenge}
+        challenge={challenge}
+      />
+      {challenge && (
+        <Box sx={{ mt: 3 }}>
+          <CreateChallengeScheduleForm challenge_id={challenge?.challenge_id} />
+        </Box>
+      )}
     </>
   );
 };

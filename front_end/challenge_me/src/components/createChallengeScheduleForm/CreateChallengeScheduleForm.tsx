@@ -8,7 +8,9 @@ import {
   Select,
   MenuItem,
   Autocomplete,
-  Modal
+  Modal,
+  Button,
+  IconButton
 } from "@mui/material";
 import { ContentPasteOffSharp, Send as SendIcon } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
@@ -16,6 +18,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useForm, Controller, FieldValues, FieldErrors } from "react-hook-form";
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import {
   convertServiceErrorToUseFormError,
   getValidationProps,
@@ -32,7 +35,7 @@ import {
 } from "../../clients/challengeSchedules";
 import CreateChallengeTypeForm from "../createChallengeTypeForm/CreateChallengeTypeForm";
 
-const style = {
+const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
@@ -46,7 +49,6 @@ const style = {
 
 type FormData = {
   challenge_id: number;
-  user_id: number;
   challenge_type_id?: number;
   total_goal: number;
   start_date: Date;
@@ -55,7 +57,6 @@ type FormData = {
 
 type Props = {
   challenge_id: number;
-  user_id: number;
 };
 
 const mapChallengeTypeToOption = (types: ChallengeType[] = []) =>
@@ -65,24 +66,17 @@ const mapChallengeTypeToOption = (types: ChallengeType[] = []) =>
     ...type
   }));
 
-const createChallengeTypeOption = { label: "Other..." };
-
-export default function CreateChallengeScheduleForm({
-  challenge_id,
-  user_id
-}: Props) {
+export default function CreateChallengeScheduleForm({ challenge_id }: Props) {
   const {
     control,
     handleSubmit,
     formState: { errors },
     register,
     setValue,
-    setError,
-    getValues
+    setError
   } = useForm<FormData>({
     defaultValues: {
       challenge_id,
-      user_id,
       challenge_type_id: undefined,
       total_goal: undefined,
       start_date: new Date(),
@@ -116,11 +110,9 @@ export default function CreateChallengeScheduleForm({
       .finally(() => setLoading(false));
   };
 
-  // TODO: Fix this refresh here, very hacky!!!
   const handleTypeOnSuccess = () => {
     setLoadTypesTrigger(Date.now());
     setModalOpen(false);
-    setValue("challenge_type_id", 2);
   };
 
   return (
@@ -136,32 +128,30 @@ export default function CreateChallengeScheduleForm({
         }}
         autoComplete="off"
       >
-        <Autocomplete
-          options={[
-            ...mapChallengeTypeToOption(challengeTypesAsync.value),
-            createChallengeTypeOption
-          ]}
-          // TODO(ricsi): autocomplete open modal is very hacky!!!! Move create type to button
-          onChange={(event: any, value: ChallengeType | null) => {
-            if (value === createChallengeTypeOption) {
-              setModalOpen(true);
-              return;
-            }
-
-            setValue("challenge_type_id", value?.challenge_type_id);
-          }}
-          renderInput={(params) => {
-            return (
-              <TextField
-                {...params}
-                {...getValidationProps(errors, "challenge_type_id")}
-                fullWidth
-                variant="standard"
-                label="Challenge type"
-              />
-            );
-          }}
-        />
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Autocomplete
+            sx={{ flex: 1, mr: 2 }}
+            options={mapChallengeTypeToOption(challengeTypesAsync.value)}
+            onChange={(event: any, value: ChallengeType | null) => {
+              setValue("challenge_type_id", value?.challenge_type_id);
+            }}
+            loading={challengeTypesAsync.loading}
+            renderInput={(params) => {
+              return (
+                <TextField
+                  {...params}
+                  {...getValidationProps(errors, "challenge_type_id")}
+                  fullWidth
+                  variant="standard"
+                  label="Challenge type"
+                />
+              );
+            }}
+          />
+          <IconButton component="span" onClick={() => setModalOpen(true)}>
+            <AddBoxOutlinedIcon />
+          </IconButton>
+        </Box>
         {/* TODO(ricsi): input field should only allow numbers */}
         <TextField
           {...register("total_goal", { required: true, minLength: 2 })}
@@ -208,8 +198,9 @@ export default function CreateChallengeScheduleForm({
           Create schedule
         </LoadingButton>
       </Box>
+
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <Box sx={style}>
+        <Box sx={modalStyle}>
           <CreateChallengeTypeForm onSuccess={handleTypeOnSuccess} />
         </Box>
       </Modal>

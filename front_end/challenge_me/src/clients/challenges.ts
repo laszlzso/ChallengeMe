@@ -29,7 +29,10 @@ export const useChallengesClient = () => {
       },
       body: JSON.stringify(data)
     });
-    return (await response.json()) as Challenge;
+    if (response.status === 400) {
+      return Promise.reject(await response.json());
+    }
+    return Promise.resolve((await response.json()) as Challenge);
   };
 
   return {

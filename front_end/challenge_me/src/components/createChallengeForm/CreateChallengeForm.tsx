@@ -10,10 +10,7 @@ import {
   getValidationProps,
   getValidationPropsWithField
 } from "../../utils/form";
-import {
-  NewChallengeShape,
-  useChallengesClient
-} from "../../clients/challenges";
+import { Challenge, NewChallengeShape } from "../../clients/challenges";
 
 type FormData = {
   title: string;
@@ -21,7 +18,17 @@ type FormData = {
   endDate: Date | null;
 };
 
-export default function CreateChallengeForm() {
+type onCreateChallengeShape = (data: NewChallengeShape) => Promise<void>;
+
+type Props = {
+  onCreateChallenge: onCreateChallengeShape;
+  challenge?: Challenge;
+};
+
+export default function CreateChallengeForm({
+  onCreateChallenge,
+  challenge
+}: Props) {
   const {
     control,
     handleSubmit,
@@ -38,15 +45,12 @@ export default function CreateChallengeForm() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { createChallenge } = useChallengesClient();
-
   const onSubmit = (data: FormData) => {
     setLoading(true);
 
-    createChallenge(data as NewChallengeShape).then(() => {
-      setLoading(false);
-      window.location.assign("/challenges");
-    });
+    onCreateChallenge(data as NewChallengeShape).finally(() =>
+      setLoading(false)
+    );
   };
 
   const validateEndDate = (value: FormData["endDate"]) => {
@@ -56,6 +60,51 @@ export default function CreateChallengeForm() {
     );
   };
 
+  if (challenge) {
+    return (
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Typography variant="h4" gutterBottom component="div">
+          Your Challenge
+        </Typography>
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { mb: 2 },
+            "& .MuiButton-root": { mb: 2 }
+          }}
+          autoComplete="off"
+        >
+          <TextField
+            fullWidth
+            label="Title"
+            variant="standard"
+            value={challenge.title}
+            disabled
+          />
+          <DesktopDatePicker
+            label="Start date"
+            inputFormat="MM/dd/yyyy"
+            disabled
+            onChange={() => {}}
+            value={challenge.start_date}
+            renderInput={(params) => (
+              <TextField {...params} fullWidth variant="standard" />
+            )}
+          />
+          <DesktopDatePicker
+            label="End date"
+            inputFormat="MM/dd/yyyy"
+            disabled
+            onChange={() => {}}
+            value={challenge.end_date}
+            renderInput={(params) => (
+              <TextField {...params} fullWidth variant="standard" />
+            )}
+          />
+        </Box>
+      </LocalizationProvider>
+    );
+  }
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Typography variant="h4" gutterBottom component="div">
