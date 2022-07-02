@@ -15,7 +15,7 @@ class ChallengeTypeListApiView(APIView):
     def get(self, request, *args, **kwargs):
         challenge_types = ChallengeType.objects.all()
         serializer = ChallengeTypeSerializer(challenge_types, many=True)
-        logger.info('Retrieved %s challenge types entries', len(serializer.data))
+        logger.info('Retrieved %s challenge type entries', len(serializer.data))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes([IsAuthenticated])
