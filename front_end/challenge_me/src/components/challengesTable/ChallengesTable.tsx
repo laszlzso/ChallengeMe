@@ -6,18 +6,26 @@ import {
   TableCell,
   TableBody
 } from "@mui/material";
+import { useRouter } from "next/router";
 import React, { FC } from "react";
 import { useAsync } from "react-use";
-import { useChallengesClient } from "../../clients/challenges";
+import { Challenge, useChallengesClient } from "../../clients/challenges";
 
 const ChallengesTable: FC = () => {
   const { getAllChallenges } = useChallengesClient();
+
+  const router = useRouter();
 
   const { loading, error, value } = useAsync(getAllChallenges, []);
 
   if (!Array.isArray(value)) {
     return null;
   }
+
+  const onRowClick = (challenge: Challenge) => {
+    const { challenge_id } = challenge;
+    router.push(`/challenge/${challenge_id}`);
+  };
 
   return (
     <TableContainer>
@@ -32,7 +40,11 @@ const ChallengesTable: FC = () => {
         </TableHead>
         <TableBody>
           {value?.map((row) => (
-            <TableRow key={row.challenge_id}>
+            <TableRow
+              key={row.challenge_id}
+              hover
+              onClick={() => onRowClick(row)}
+            >
               <TableCell>
                 <strong>{row.challenge_id}</strong>
               </TableCell>
