@@ -86,6 +86,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
     if (response.status === 201) {
       router.push("/login");
     } else if (response.status === 400) {
+      // TODO(rics): instead return Promise.reject and use catch on the other side
       throw await response.json();
     } else {
       alert("Something went wrong!");

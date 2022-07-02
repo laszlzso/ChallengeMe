@@ -4,6 +4,8 @@ import Head from "next/head";
 import Image from "next/image";
 import ChallengesTable from "../src/components/challengesTable/ChallengesTable";
 import CreateChallengeForm from "../src/components/createChallengeForm/CreateChallengeForm";
+import CreateChallengeScheduleForm from "../src/components/createChallengeScheduleForm/CreateChallengeScheduleForm";
+import CreateChallengeTypeForm from "../src/components/createChallengeTypeForm/CreateChallengeTypeForm";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -16,6 +18,8 @@ const Home: NextPage = () => {
       </Head>
 
       <CreateChallengeForm />
+      {/* TODO(ricsi): Create challange first, only then show create schedule with challenge_id passed down */}
+      <CreateChallengeScheduleForm />
     </>
   );
 };
