@@ -15,6 +15,7 @@ import ChallengesTable from "../../src/components/challengesTable/ChallengesTabl
 import CreateAndDisplayChallengeCompletionEntries from "../../src/components/createAndDisplayChallengeCompletionEntries/CreateAndDisplayChallengeCompletionEntries";
 import CreateChallengeCompletionEntryForm from "../../src/components/createChallengeCompletionEntryForm/CreateChallengeCompletionEntryForm";
 import styles from "../styles/Home.module.css";
+import ChallengeSummaryTable from "../../src/components/challengeSummaryTable/ChallengeSummaryTable";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -68,6 +69,7 @@ const Home: NextPage = () => {
           "& .MuiButton-root": { mb: 2 }
         }}
       >
+        <ChallengeSummaryTable challenge_id={challenge_id} />
         <CreateAndDisplayChallengeCompletionEntries
           challenge_id={challenge_id}
         />
