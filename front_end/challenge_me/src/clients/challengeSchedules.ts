@@ -29,6 +29,13 @@ export const useChallengeSchedulesClient = () => {
     return (await response.json()) as ChallengeSchedule[];
   };
 
+  const getChallengeSchedulesByChallengeId = async (challenge_id: number) => {
+    const response = await fetchAuthenticated(
+      `/api/challenges/${challenge_id}/schedules/`
+    );
+    return (await response.json()) as ChallengeSchedule[];
+  };
+
   const createChallengeSchedule = async (data: NewChallengeScheduleShape) => {
     const response = await fetchAuthenticated("/api/challenge-schedules/", {
       method: "POST",
@@ -45,6 +52,7 @@ export const useChallengeSchedulesClient = () => {
 
   return {
     getAllChallengeSchedules,
+    getChallengeSchedulesByChallengeId,
     createChallengeSchedule
   };
 };

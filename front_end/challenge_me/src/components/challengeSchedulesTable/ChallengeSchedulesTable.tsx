@@ -18,11 +18,12 @@ type Props = {
 };
 
 const ChallengeSchedulesTable: FC<Props> = ({ challenge_id, trigger }) => {
-  const { getAllChallengeSchedules } = useChallengeSchedulesClient();
+  const { getChallengeSchedulesByChallengeId } = useChallengeSchedulesClient();
 
-  const { loading, error, value } = useAsync(getAllChallengeSchedules, [
-    trigger
-  ]);
+  const { loading, error, value } = useAsync(
+    () => getChallengeSchedulesByChallengeId(challenge_id),
+    [trigger]
+  );
 
   if (!Array.isArray(value)) {
     return null;
