@@ -1,4 +1,10 @@
-import { FieldErrors, FieldValues, UseFormSetError } from "react-hook-form";
+import {
+  FieldErrors,
+  FieldValues,
+  UseFormClearErrors,
+  UseFormSetError,
+  UseFormWatch
+} from "react-hook-form";
 
 type ServiceErrors = Record<string, string[]>;
 
@@ -17,9 +23,14 @@ export const getValidationProps = (errors: FieldErrors, name: string) => ({
 
 export const convertServiceErrorToUseFormError = (
   errors: ServiceErrors = {},
-  setError: UseFormSetError<any>
+  setError: UseFormSetError<any>,
+  watch: UseFormWatch<any>,
+  clearErrors: UseFormClearErrors<any>
 ) => {
   Object.entries(errors)?.forEach(([key, value]) =>
     setError(key, { type: "validate", message: value.join("\n") })
   );
+  watch(() => {
+    clearErrors("non_field_errors");
+  });
 };

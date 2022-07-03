@@ -14,6 +14,7 @@ import CreateChallengeForm from "../src/components/createChallengeForm/CreateCha
 import CreateChallengeScheduleForm from "../src/components/createChallengeScheduleForm/CreateChallengeScheduleForm";
 import CreateChallengeTypeForm from "../src/components/createChallengeTypeForm/CreateChallengeTypeForm";
 import styles from "../styles/Home.module.css";
+import CreateAndDisplayChallengeSchedules from "../src/components/createAndDisplayChallengeSchedules/CreateAndDisplayChallengeSchedules";
 
 const Home: NextPage = () => {
   const [challenge, setChallenge] = useState<Challenge>();
@@ -37,9 +38,9 @@ const Home: NextPage = () => {
         challenge={challenge}
       />
       {challenge && (
-        <Box sx={{ mt: 3 }}>
-          <CreateChallengeScheduleForm challenge_id={challenge?.challenge_id} />
-        </Box>
+        <CreateAndDisplayChallengeSchedules
+          challenge_id={challenge?.challenge_id}
+        />
       )}
     </>
   );
