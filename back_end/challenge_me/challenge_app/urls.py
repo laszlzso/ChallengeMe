@@ -23,14 +23,14 @@ from .challenge_completion_entry_views import (
 
 urlpatterns = [
     path('challenges/', ChallengeListApiView.as_view()),
-    path('challenges/<int:challenge_id>', ChallengeApiView.as_view()),
+    path('challenges/<int:challenge_id>/', ChallengeApiView.as_view()),
     path('challenges/<int:challenge_id>/schedules/', ChallengeSchedulesApiView.as_view()),
     path('challenges/<int:challenge_id>/entries/', ChallengeCompletionEntriesApiView.as_view()),
     path('challenges/<int:challenge_id>/summary/', ChallengeSummaryApiView.as_view()),
     path('challenge-types/', ChallengeTypeListApiView.as_view()),
-    path('challenge-types/<int:challenge_type_id>', ChallengeTypeApiView.as_view()),
+    path('challenge-types/<int:challenge_type_id>/', ChallengeTypeApiView.as_view()),
     path('challenge-schedules/', ChallengeScheduleListApiView.as_view()),
-    path('challenge-schedules/<int:challenge_schedule_id>', ChallengeScheduleApiView.as_view()),
+    path('challenge-schedules/<int:challenge_schedule_id>/', ChallengeScheduleApiView.as_view()),
     path('challenge-completion-entries/', ChallengeCompletionEntryListApiView.as_view()),
-    path('challenge-completion-entries/<int:challenge_completion_entry_id>', ChallengeCompletionEntryApiView.as_view()),
+    path('challenge-completion-entries/<int:challenge_completion_entry_id>/', ChallengeCompletionEntryApiView.as_view()),
 ]

@@ -15,14 +15,26 @@ import CreateChallengeScheduleForm from "../src/components/createChallengeSchedu
 import CreateChallengeTypeForm from "../src/components/createChallengeTypeForm/CreateChallengeTypeForm";
 import styles from "../styles/Home.module.css";
 import CreateAndDisplayChallengeSchedules from "../src/components/createAndDisplayChallengeSchedules/CreateAndDisplayChallengeSchedules";
+import Router, { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const [challenge, setChallenge] = useState<Challenge>();
+  const { query } = useRouter();
+
+  const challenge = JSON.parse(
+    Array.isArray(query.challenge)
+      ? query.challenge.join("")
+      : query.challenge || "null"
+  );
 
   const { createChallenge } = useChallengesClient();
 
   const handleCreateChallenge = async (data: NewChallengeShape) => {
-    return createChallenge(data).then((response) => setChallenge(response));
+    return createChallenge(data).then((response) => {
+      Router.push({
+        pathname: "/create_challenge",
+        query: { challenge: JSON.stringify(response) }
+      });
+    });
   };
 
   return (
