@@ -26,7 +26,7 @@ class ChallengeScheduleListApiView(APIView):
             'user_id': self.request.user.id,
             'challenge_type_id': request.data.get('challenge_type_id'),
             'total_goal': float(request.data.get('total_goal')),
-            'start_date': datetime.strptime(request.data.get('startDate').split('T')[0], '%Y-%m-%d').date(),
+             'start_date': datetime.strptime(request.data.get('start_date').split('T')[0], '%Y-%m-%d').date(),
             'day_frequency': int(request.data.get('day_frequency'))
         }
         serializer = ChallengeScheduleSerializer(data=data)
@@ -71,7 +71,7 @@ class ChallengeScheduleApiView(APIView):
             'challenge_id': request.data.get('challenge_id'),
             'challenge_type_id': request.data.get('challenge_type_id'),
             'total_goal': float(request.data.get('total_goal')),
-            'start_date': datetime.strptime(request.data.get('startDate').split('T')[0], '%Y-%m-%d').date(),
+            'start_date': datetime.strptime(request.data.get('start_date').split('T')[0], '%Y-%m-%d').date(),
             'day_frequency': int(request.data.get('day_frequency'))
         }
         serializer = ChallengeScheduleSerializer(instance=challenge_schedule_instance, data=data, partial=True)

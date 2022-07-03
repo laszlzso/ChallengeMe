@@ -14,8 +14,8 @@ import { Challenge, NewChallengeShape } from "../../clients/challenges";
 
 type FormData = {
   title: string;
-  startDate: Date | null;
-  endDate: Date | null;
+  start_date: Date | null;
+  end_date: Date | null;
 };
 
 type onCreateChallengeShape = (data: NewChallengeShape) => Promise<void>;
@@ -38,8 +38,8 @@ export default function CreateChallengeForm({
   } = useForm<FormData>({
     defaultValues: {
       title: "",
-      startDate: new Date(),
-      endDate: new Date()
+      start_date: new Date(),
+      end_date: new Date()
     }
   });
 
@@ -53,10 +53,13 @@ export default function CreateChallengeForm({
     );
   };
 
-  const validateEndDate = (value: FormData["endDate"]) => {
-    const startDate = getValues("startDate");
+  const validateEndDate = (value: FormData["end_date"]) => {
+    const start_date = getValues("start_date");
     return (
-      !value || !startDate || value >= startDate || "Should be after start date"
+      !value ||
+      !start_date ||
+      value >= start_date ||
+      "Should be after start date"
     );
   };
 
@@ -126,7 +129,7 @@ export default function CreateChallengeForm({
           variant="standard"
         />
         <Controller
-          name="startDate"
+          name="start_date"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
@@ -146,7 +149,7 @@ export default function CreateChallengeForm({
           )}
         />
         <Controller
-          name="endDate"
+          name="end_date"
           control={control}
           rules={{
             required: true,
@@ -157,7 +160,7 @@ export default function CreateChallengeForm({
               {...field}
               label="End date"
               inputFormat="MM/dd/yyyy"
-              minDate={getValues("startDate")}
+              minDate={getValues("start_date")}
               renderInput={(params) => (
                 <TextField
                   {...params}

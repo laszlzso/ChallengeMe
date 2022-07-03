@@ -9,8 +9,8 @@ export type Challenge = {
 
 export type NewChallengeShape = {
   title: string;
-  startDate: Date;
-  endDate: Date;
+  start_date: Date;
+  end_date: Date;
 };
 
 export const useChallengesClient = () => {

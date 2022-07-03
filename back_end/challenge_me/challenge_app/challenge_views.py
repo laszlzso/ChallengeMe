@@ -23,8 +23,8 @@ class ChallengeListApiView(APIView):
     def post(self, request, *args, **kwargs):
         data = {
             'title': request.data.get('title'),
-            'start_date': datetime.strptime(request.data.get('startDate').split('T')[0], '%Y-%m-%d').date(),
-            'end_date': datetime.strptime(request.data.get('endDate').split('T')[0], '%Y-%m-%d').date()
+            'start_date': datetime.strptime(request.data.get('start_date').split('T')[0], '%Y-%m-%d').date(),
+            'end_date': datetime.strptime(request.data.get('end_date').split('T')[0], '%Y-%m-%d').date()
         }
         serializer = ChallengeSerializer(data=data)
         if serializer.is_valid():
@@ -63,8 +63,8 @@ class ChallengeApiView(APIView):
             )
         data = {
             'title': request.data.get('title'),
-            'start_date': datetime.strptime(request.data.get('startDate').split('T')[0], '%Y-%m-%d').date(),
-            'end_date': datetime.strptime(request.data.get('endDate').split('T')[0], '%Y-%m-%d').date()
+            'start_date': datetime.strptime(request.data.get('start_date').split('T')[0], '%Y-%m-%d').date(),
+            'end_date': datetime.strptime(request.data.get('end_date').split('T')[0], '%Y-%m-%d').date()
         }
         serializer = ChallengeSerializer(instance=challenge_instance, data=data, partial=True)
         if serializer.is_valid():

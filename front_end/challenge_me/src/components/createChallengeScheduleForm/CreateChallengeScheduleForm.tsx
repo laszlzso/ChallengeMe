@@ -195,7 +195,7 @@ export default function CreateChallengeScheduleForm({ challenge_id }: Props) {
           loadingPosition="end"
           variant="contained"
         >
-          Create schedule
+          Add schedule
         </LoadingButton>
       </Box>
 
