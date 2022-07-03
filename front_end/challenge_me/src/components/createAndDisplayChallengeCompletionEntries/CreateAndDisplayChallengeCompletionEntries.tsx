@@ -7,16 +7,19 @@ import CreateChallengeScheduleForm from "../createChallengeScheduleForm/CreateCh
 
 type Props = {
   challenge_id: number;
+  onSuccess: () => void;
 };
 
 const CreateAndDisplayChallengeCompletionEntries: FC<Props> = ({
-  challenge_id
+  challenge_id,
+  onSuccess
 }) => {
   const [loadCompletionEntriesTrigger, setLoadCompletionEntriesTrigger] =
     useState<number>(Date.now());
 
   const handleCompletionEntryCreation = () => {
     setLoadCompletionEntriesTrigger(Date.now());
+    onSuccess();
   };
 
   return (

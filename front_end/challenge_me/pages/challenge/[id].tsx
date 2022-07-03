@@ -25,6 +25,14 @@ const Home: NextPage = () => {
   const { getChallengeById } = useChallengesClient();
   const [editLoading, setEditLoading] = useState<boolean>(false);
 
+  const [loadSummaryTrigger, setLoadSummaryTrigger] = useState<number>(
+    Date.now()
+  );
+
+  const handleEntryCreation = () => {
+    setLoadSummaryTrigger(Date.now());
+  };
+
   const handleEditChallenge = () => {
     setEditLoading(true);
 
@@ -69,9 +77,13 @@ const Home: NextPage = () => {
           "& .MuiButton-root": { mb: 2 }
         }}
       >
-        <ChallengeSummaryTable challenge_id={challenge_id} />
+        <ChallengeSummaryTable
+          challenge_id={challenge_id}
+          trigger={loadSummaryTrigger}
+        />
         <CreateAndDisplayChallengeCompletionEntries
           challenge_id={challenge_id}
+          onSuccess={handleEntryCreation}
         />
       </Box>
     </>
