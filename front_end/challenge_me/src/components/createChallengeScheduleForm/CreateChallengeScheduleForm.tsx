@@ -135,8 +135,6 @@ export default function CreateChallengeScheduleForm({
     );
   };
 
-  console.log(getValues(), errors);
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Typography variant="h4" gutterBottom component="div">
