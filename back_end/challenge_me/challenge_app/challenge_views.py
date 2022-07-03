@@ -1,12 +1,22 @@
 import logging
 from datetime import datetime
+
+from django.core.exceptions import ObjectDoesNotExist
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
-from .models import Challenge
-from .serializers import ChallengeSerializer
+
+from .models import (
+    Challenge,
+    ChallengeSchedule
+)
+from .serializers import (
+    ChallengeSerializer,
+    ChallengeScheduleSerializer
+)
 
 logger = logging.getLogger('django')
 
@@ -85,3 +95,18 @@ class ChallengeApiView(APIView):
             {'res': 'Object with challenge id {} deleted'.format(challenge_id)},
             status=status.HTTP_200_OK
         )
+
+
+class ChallengeSchedulesApiView(APIView):
+    @permission_classes([IsAuthenticated])
+    def get(self, request, challenge_id, *args, **kwargs):
+        try:
+            challenge = Challenge.objects.get(challenge_id=challenge_id)
+        except ObjectDoesNotExist:
+            return Response(
+                {'res': 'Object with challenge id {} does not exist'.format(challenge_id)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        challenge_schedules = ChallengeSchedule.objects.filter(challenge_id=challenge)
+        serializer = ChallengeScheduleSerializer(challenge_schedules, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
