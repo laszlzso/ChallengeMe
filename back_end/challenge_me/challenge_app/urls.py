@@ -3,21 +3,22 @@ from .challenge_views import (
     ChallengeListApiView,
     ChallengeApiView,
     ChallengeSchedulesApiView,
-    ChallengeCompletionEntriesApiView
+    ChallengeCompletionEntriesApiView,
+    ChallengeSummaryApiView,
 )
 from .challenge_type_views import (
     ChallengeTypeListApiView,
-    ChallengeTypeApiView
+    ChallengeTypeApiView,
 )
 
 from .challenge_schedule_views import (
     ChallengeScheduleListApiView,
-    ChallengeScheduleApiView
+    ChallengeScheduleApiView,
 )
 
 from .challenge_completion_entry_views import (
     ChallengeCompletionEntryListApiView,
-    ChallengeCompletionEntryApiView
+    ChallengeCompletionEntryApiView,
 )
 
 urlpatterns = [
@@ -25,6 +26,7 @@ urlpatterns = [
     path('challenges/<int:challenge_id>', ChallengeApiView.as_view()),
     path('challenges/<int:challenge_id>/schedules/', ChallengeSchedulesApiView.as_view()),
     path('challenges/<int:challenge_id>/entries/', ChallengeCompletionEntriesApiView.as_view()),
+    path('challenges/<int:challenge_id>/summary/', ChallengeSummaryApiView.as_view()),
     path('challenge-types/', ChallengeTypeListApiView.as_view()),
     path('challenge-types/<int:challenge_type_id>', ChallengeTypeApiView.as_view()),
     path('challenge-schedules/', ChallengeScheduleListApiView.as_view()),
