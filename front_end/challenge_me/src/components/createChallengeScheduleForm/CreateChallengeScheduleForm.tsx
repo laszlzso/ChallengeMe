@@ -10,7 +10,8 @@ import {
   Autocomplete,
   Modal,
   Button,
-  IconButton
+  IconButton,
+  Alert
 } from "@mui/material";
 import { ContentPasteOffSharp, Send as SendIcon } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
@@ -34,6 +35,7 @@ import {
   useChallengeSchedulesClient
 } from "../../clients/challengeSchedules";
 import CreateChallengeTypeForm from "../createChallengeTypeForm/CreateChallengeTypeForm";
+import FormAlert from "../formAlert/FormAlert";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -57,6 +59,7 @@ type FormData = {
 
 type Props = {
   challenge_id: number;
+  onSuccess: () => void;
 };
 
 const mapChallengeTypeToOption = (types: ChallengeType[] = []) =>
@@ -66,14 +69,21 @@ const mapChallengeTypeToOption = (types: ChallengeType[] = []) =>
     ...type
   }));
 
-export default function CreateChallengeScheduleForm({ challenge_id }: Props) {
+export default function CreateChallengeScheduleForm({
+  challenge_id,
+  onSuccess
+}: Props) {
   const {
     control,
     handleSubmit,
     formState: { errors },
     register,
     setValue,
-    setError
+    setError,
+    reset,
+    getValues,
+    clearErrors,
+    watch
   } = useForm<FormData>({
     defaultValues: {
       challenge_id,
@@ -83,6 +93,7 @@ export default function CreateChallengeScheduleForm({ challenge_id }: Props) {
       day_frequency: undefined
     }
   });
+
   const { getAllChallengeTypes } = useChallengeTypesClient();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -104,9 +115,12 @@ export default function CreateChallengeScheduleForm({ challenge_id }: Props) {
 
     createChallengeSchedule(data as NewChallengeScheduleShape)
       .then(() => {
-        // window.location.assign("/challenges");
+        onSuccess();
+        reset();
       })
-      .catch((errors) => convertServiceErrorToUseFormError(errors, setError))
+      .catch((errors) =>
+        convertServiceErrorToUseFormError(errors, setError, watch, clearErrors)
+      )
       .finally(() => setLoading(false));
   };
 
@@ -114,6 +128,14 @@ export default function CreateChallengeScheduleForm({ challenge_id }: Props) {
     setLoadTypesTrigger(Date.now());
     setModalOpen(false);
   };
+
+  const findChallengeTypeById = (id?: number) => {
+    return challengeTypesAsync.value?.find(
+      (type) => type.challenge_type_id === id
+    );
+  };
+
+  console.log(getValues(), errors);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -128,7 +150,9 @@ export default function CreateChallengeScheduleForm({ challenge_id }: Props) {
         }}
         autoComplete="off"
       >
+        <FormAlert errors={errors} />
         <Box sx={{ display: "flex", alignItems: "center" }}>
+          {/* TODO(ricsi): need to clear Autocomplete on Add schedule success */}
           <Autocomplete
             sx={{ flex: 1, mr: 2 }}
             options={mapChallengeTypeToOption(challengeTypesAsync.value)}
