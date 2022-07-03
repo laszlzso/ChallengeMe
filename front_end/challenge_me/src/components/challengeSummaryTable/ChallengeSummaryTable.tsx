@@ -20,17 +20,18 @@ import {
 
 type Props = {
   challenge_id: number;
+  trigger: any;
 };
 
 const nonUserHeaders = ["date"];
 
-const ChallengeSummaryTable: FC<Props> = ({ challenge_id }) => {
+const ChallengeSummaryTable: FC<Props> = ({ challenge_id, trigger }) => {
   const { getChallengeSummaryById } = useChallengesClient();
 
   const { loading, error, value } = useAsync(
     () =>
       challenge_id ? getChallengeSummaryById(challenge_id) : Promise.resolve(),
-    [challenge_id]
+    [challenge_id, trigger]
   );
 
   const users = value?.headers.filter(
