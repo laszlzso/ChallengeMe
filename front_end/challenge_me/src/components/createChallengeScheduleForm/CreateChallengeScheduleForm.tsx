@@ -176,7 +176,7 @@ export default function CreateChallengeScheduleForm({
         </Box>
         {/* TODO(ricsi): input field should only allow numbers */}
         <TextField
-          {...register("total_goal", { required: true, minLength: 2 })}
+          {...register("total_goal", { required: true })}
           {...getValidationProps(errors, "total_goal")}
           fullWidth
           label="Total goal"
@@ -204,7 +204,7 @@ export default function CreateChallengeScheduleForm({
         />
         {/* TODO(ricsi): input field should only allow numbers */}
         <TextField
-          {...register("day_frequency", { required: true, minLength: 2 })}
+          {...register("day_frequency", { required: true })}
           {...getValidationProps(errors, "day_frequency")}
           fullWidth
           label="Day frequency"

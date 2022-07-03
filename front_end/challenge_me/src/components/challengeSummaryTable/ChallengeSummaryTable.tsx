@@ -10,6 +10,13 @@ import {
   Box
 } from "@mui/material";
 import React, { FC } from "react";
+import { useAsync } from "react-use";
+import {
+  SummaryDataScheduleShape,
+  SummaryDataShape,
+  SummaryDataUserShape,
+  useChallengesClient
+} from "../../clients/challenges";
 
 type Props = {
   challenge_id: number;
@@ -17,39 +24,14 @@ type Props = {
 
 const nonUserHeaders = ["date"];
 
-type SummaryDataScheduleShape = {
-  target: string;
-  completed: string;
-  unit: string;
-};
-
-type SummaryDataUserShape = Record<string, SummaryDataScheduleShape>;
-
-type SummaryDataShape = {
-  headers: string[];
-  body: Record<string, string | SummaryDataUserShape>[];
-};
-
 const ChallengeSummaryTable: FC<Props> = ({ challenge_id }) => {
-  // const { getAllChallengeSchedules } = useChallengeSchedulesClient();
+  const { getChallengeSummaryById } = useChallengesClient();
 
-  // const { loading, error, value } = useAsync(getAllChallengeSchedules, [
-  //   trigger
-  // ]);
-
-  const value: SummaryDataShape = {
-    headers: ["date", "user_1", "user_2"],
-    body: [
-      {
-        date: "222",
-        user_1: {
-          schedule_1: { target: "50", completed: "40", unit: "rep" },
-          schedule_2: { target: "5.0", completed: "5.5", unit: "km" }
-        },
-        user_2: { schedule_1: { target: "5.0", completed: "3.5", unit: "km" } }
-      }
-    ]
-  };
+  const { loading, error, value } = useAsync(
+    () =>
+      challenge_id ? getChallengeSummaryById(challenge_id) : Promise.resolve(),
+    [challenge_id]
+  );
 
   const users = value?.headers.filter(
     (name) => nonUserHeaders.indexOf(name) === -1
@@ -58,12 +40,17 @@ const ChallengeSummaryTable: FC<Props> = ({ challenge_id }) => {
   const getSchedulesFromRow = (
     row: Record<string, string | SummaryDataUserShape>,
     user: string
-  ): SummaryDataScheduleShape[] => {
-    return Object.values(row[user]);
+  ): [string, SummaryDataScheduleShape][] => {
+    return Object.entries(row[user]);
   };
 
-  const formatSchedule = (schedule: SummaryDataScheduleShape) =>
-    `${schedule.completed}/${schedule.target} (${schedule.unit})`;
+  const roundToTwoDecimal = (num: string) =>
+    Math.round(parseFloat(num) * 100) / 100;
+
+  const formatSchedule = (key: string, schedule: SummaryDataScheduleShape) =>
+    `${key}: ${roundToTwoDecimal(schedule.completed) || "0"}${
+      schedule.target ? ` / ${roundToTwoDecimal(schedule.target)}` : ""
+    } (${schedule.unit})`;
 
   if (!Array.isArray(value?.body)) {
     return null;
@@ -88,12 +75,12 @@ const ChallengeSummaryTable: FC<Props> = ({ challenge_id }) => {
                 </TableCell>
                 {users?.map((user) => (
                   <TableCell key={user}>
-                    {getSchedulesFromRow(row, user).map((schedule) => (
+                    {getSchedulesFromRow(row, user).map(([key, schedule]) => (
                       <Chip
                         key={schedule.unit}
                         sx={{ mr: 1 }}
                         variant="outlined"
-                        label={formatSchedule(schedule)}
+                        label={formatSchedule(key, schedule)}
                       />
                     ))}
                   </TableCell>
