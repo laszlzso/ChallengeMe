@@ -30,8 +30,9 @@ class ChallengeCompletionEntryListApiView(APIView):
         field_object = ChallengeSchedule._meta.get_field('user_id')
         field_value = field_object.value_from_object(challenge_schedule) if challenge_schedule else None
         if self.request.user.id != field_value:
-            return Response({'res': 'You are not allowed to add completion entries for other users'},
-                            status=status.HTTP_401_UNAUTHORIZED)
+            # TODO(ricsi): change all error messages to align with UI
+            return Response({'non_field_errors': ['You are not allowed to add completion entries for other users']},
+                            status=status.HTTP_403_FORBIDDEN)
 
         # TODO(laszlzso): try passing this directly
         request_datetime = parser.parse(request.data.get('timestamp', ''), yearfirst=True)

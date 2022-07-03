@@ -11,11 +11,13 @@ from rest_framework.decorators import permission_classes
 
 from .models import (
     Challenge,
-    ChallengeSchedule
+    ChallengeSchedule,
+    ChallengeCompletionEntry
 )
 from .serializers import (
     ChallengeSerializer,
-    ChallengeScheduleSerializer
+    ChallengeScheduleSerializer,
+    ChallengeCompletionEntrySerializer
 )
 
 logger = logging.getLogger('django')
@@ -109,4 +111,18 @@ class ChallengeSchedulesApiView(APIView):
             )
         challenge_schedules = ChallengeSchedule.objects.filter(challenge_id=challenge)
         serializer = ChallengeScheduleSerializer(challenge_schedules, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ChallengeCompletionEntriesApiView(APIView):
+    @permission_classes([IsAuthenticated])
+    def get(self, request, challenge_id, *args, **kwargs):
+        try:
+            challenge = Challenge.objects.get(challenge_id=challenge_id)
+        except ObjectDoesNotExist:
+            return Response(
+                {'res': 'Object with challenge id {} does not exist'.format(challenge_id)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        challenge_completion_entries = ChallengeCompletionEntry.objects.filter(challenge_schedule_id__challenge_id=challenge)
+        serializer = ChallengeCompletionEntrySerializer(challenge_completion_entries, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -2,7 +2,8 @@ from django.urls import path
 from .challenge_views import (
     ChallengeListApiView,
     ChallengeApiView,
-    ChallengeSchedulesApiView
+    ChallengeSchedulesApiView,
+    ChallengeCompletionEntriesApiView
 )
 from .challenge_type_views import (
     ChallengeTypeListApiView,
@@ -23,6 +24,7 @@ urlpatterns = [
     path('challenges/', ChallengeListApiView.as_view()),
     path('challenges/<int:challenge_id>', ChallengeApiView.as_view()),
     path('challenges/<int:challenge_id>/schedules/', ChallengeSchedulesApiView.as_view()),
+    path('challenges/<int:challenge_id>/entries/', ChallengeCompletionEntriesApiView.as_view()),
     path('challenge-types/', ChallengeTypeListApiView.as_view()),
     path('challenge-types/<int:challenge_type_id>', ChallengeTypeApiView.as_view()),
     path('challenge-schedules/', ChallengeScheduleListApiView.as_view()),
