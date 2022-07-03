@@ -21,6 +21,13 @@ export const useChallengesClient = () => {
     return (await response.json()) as Challenge[];
   };
 
+  const getChallengeById = async (challenge_id: number) => {
+    const response = await fetchAuthenticated(
+      `/api/challenges/${challenge_id}/`
+    );
+    return (await response.json()) as Challenge;
+  };
+
   const createChallenge = async (data: NewChallengeShape) => {
     const response = await fetchAuthenticated("/api/challenges/", {
       method: "POST",
@@ -37,6 +44,7 @@ export const useChallengesClient = () => {
 
   return {
     getAllChallenges,
+    getChallengeById,
     createChallenge
   };
 };
