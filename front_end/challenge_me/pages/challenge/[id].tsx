@@ -8,11 +8,14 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import ChallengesTable from "../../src/components/challengesTable/ChallengesTable";
+import CreateAndDisplayChallengeCompletionEntries from "../../src/components/createAndDisplayChallengeCompletionEntries/CreateAndDisplayChallengeCompletionEntries";
+import CreateChallengeCompletionEntryForm from "../../src/components/createChallengeCompletionEntryForm/CreateChallengeCompletionEntryForm";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  const challenge_id = parseInt(Array.isArray(id) ? id.join("") : id || "");
 
   return (
     <>
@@ -31,7 +34,11 @@ const Home: NextPage = () => {
           "& .MuiTable-root": { mb: 2 },
           "& .MuiButton-root": { mb: 2 }
         }}
-      ></Box>
+      >
+        <CreateAndDisplayChallengeCompletionEntries
+          challenge_id={challenge_id}
+        />
+      </Box>
     </>
   );
 };
