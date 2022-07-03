@@ -1,3 +1,4 @@
+import math
 from collections import OrderedDict
 import logging
 from datetime import datetime, timedelta
@@ -174,7 +175,7 @@ class ChallengeSummaryApiView(APIView):
             # Basic data: no. of days FROM schedule start date TO challenge end date
             no_of_days = (challenge.end_date - schedule.start_date).days + 1
             # Target per day based on the total number of days available in the schedule/day frequency + the total goal:
-            target_per_day = schedule.total_goal / int((no_of_days / schedule.day_frequency))
+            target_per_day = schedule.total_goal / math.ceil(no_of_days / schedule.day_frequency)
             logger.debug('%s %s %s %s %s %s', username, schedule.start_date, schedule.day_frequency, no_of_days,
                          schedule.total_goal, target_per_day)
 
@@ -193,10 +194,13 @@ class ChallengeSummaryApiView(APIView):
             completion_entries = ChallengeCompletionEntry.objects.filter(challenge_schedule_id=schedule)
             for entry in completion_entries:
                 date_str = str(entry.timestamp.date())
-                if 'completion' not in date_entries[date_str][username][ch_type]:
-                    date_entries[date_str][username][ch_type]['completion'] = 0.0
-                current = date_entries[date_str][username][ch_type]['completion']
-                date_entries[date_str][username][ch_type]['completion'] = current + entry.amount
+                if ch_type not in date_entries[date_str][username]:
+                    date_entries[date_str][username][ch_type] = OrderedDict()
+                    date_entries[date_str][username][ch_type]['unit'] = schedule.challenge_type_id.unit
+                if 'completed' not in date_entries[date_str][username][ch_type]:
+                    date_entries[date_str][username][ch_type]['completed'] = 0.0
+                current = date_entries[date_str][username][ch_type]['completed']
+                date_entries[date_str][username][ch_type]['completed'] = current + entry.amount
 
         logger.debug('Date entries: %s', date_entries)
 
@@ -206,4 +210,4 @@ class ChallengeSummaryApiView(APIView):
 
         logger.debug('Result: %s', result)
 
-        return Response({'res': result}, status=status.HTTP_200_OK)
+        return Response(result, status=status.HTTP_200_OK)
