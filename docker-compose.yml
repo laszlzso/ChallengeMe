@@ -2,15 +2,16 @@ version: "3.9"
 
 services:
   backend:
+    container_name: backendx
     build: back_end
     command: python challenge_me/manage.py runserver 0.0.0.0:8000
     volumes:
       - ./back_end:/code
     ports:
       - "8000:8000"
-    network_mode: bridge
 
   frontend:
+    container_name: frontendx
     depends_on:
       - backend
     build: front_end
@@ -19,4 +20,3 @@ services:
       - ./front_end:/app
     ports:
       - "80:80"
-    network_mode: bridge
