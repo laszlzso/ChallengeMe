@@ -25,7 +25,7 @@ jobs:
         run: docker-compose build
 
       - name: Generate Deployment Package
-        run: zip -r deploy.zip -x ./**/node_modules/**\*
+        run: zip -r deploy.zip . -x ./**/node_modules/**\*
 
       - name: Get timestamp
         uses: gerred/actions/current-time@master
