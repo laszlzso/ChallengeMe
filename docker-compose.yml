@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  backend:
+    build: back_end
+    command: python back_end/challenge_me/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
