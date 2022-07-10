@@ -16,7 +16,5 @@ services:
       - backend
     build: front_end
     command: npm start
-    volumes:
-      - ./front_end:/app
     ports:
       - "80:80"
