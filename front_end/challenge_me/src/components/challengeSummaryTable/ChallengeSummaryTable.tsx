@@ -72,7 +72,7 @@ const ChallengeSummaryTable: FC<Props> = ({ challenge_id, trigger }) => {
             {value?.body?.map((row) => (
               <TableRow key={row.date.toString()}>
                 <TableCell>
-                  <strong>{row.date}</strong>
+                  <strong>{String(row.date)}</strong>
                 </TableCell>
                 {users?.map((user) => (
                   <TableCell key={user}>

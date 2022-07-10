@@ -38,7 +38,9 @@ export default function CreateChallengeScheduleForm({ onSuccess }: Props) {
     handleSubmit,
     formState: { errors },
     register,
-    setError
+    setError,
+    watch,
+    clearErrors
   } = useForm<FormData>({
     defaultValues: {
       name: "",
@@ -57,7 +59,9 @@ export default function CreateChallengeScheduleForm({ onSuccess }: Props) {
       .then(() => {
         onSuccess?.();
       })
-      .catch((errors) => convertServiceErrorToUseFormError(errors, setError))
+      .catch((errors) =>
+        convertServiceErrorToUseFormError(errors, setError, watch, clearErrors)
+      )
       .finally(() => setLoading(false));
   };
 
