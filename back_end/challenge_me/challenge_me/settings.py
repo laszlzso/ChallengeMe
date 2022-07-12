@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-&t9z$&-2%r*m1+)mvsokhiiw4yc)_2tjwxep&)_r27143j3qy@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('challenge_me_debug')
+DEBUG = not os.getenv('challengeme_production')
 
 ALLOWED_HOSTS = ['*']
 
@@ -106,6 +106,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+} if DEBUG else {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'challengemedbx',
+        'USER': os.getenv('challengemedb_user'),
+        'PASSWORD': os.getenv('challengemedb_pwd'),
+        'HOST': os.getenv('challengemedb_url'),
+        'PORT': os.getenv('challengemedb_port')
     }
 }
 
