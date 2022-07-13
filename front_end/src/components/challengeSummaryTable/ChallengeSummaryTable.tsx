@@ -53,6 +53,35 @@ const ChallengeSummaryTable: FC<Props> = ({ challenge_id, trigger }) => {
       schedule.target ? ` / ${roundToTwoDecimal(schedule.target)}` : ""
     } (${schedule.unit})`;
 
+  const getFormattedChip = (
+    key: string,
+    schedule: SummaryDataScheduleShape,
+    dateString: string
+  ) => {
+    const props = {
+      key: schedule.unit,
+      sx: { mr: 1 },
+      label: formatSchedule(key, schedule),
+      size: "small" as any,
+      variant: "outlined" as any,
+      color: "default" as any
+    };
+
+    if (new Date(dateString) <= new Date()) {
+      props.variant = "filled";
+    }
+
+    if (schedule.completed) {
+      if (schedule.completed >= schedule.target) {
+        props.color = "success";
+      } else {
+        props.color = "info";
+      }
+    }
+
+    return <Chip {...props} />;
+  };
+
   if (!Array.isArray(value?.body)) {
     return null;
   }
@@ -76,14 +105,9 @@ const ChallengeSummaryTable: FC<Props> = ({ challenge_id, trigger }) => {
                 </TableCell>
                 {users?.map((user) => (
                   <TableCell key={user}>
-                    {getSchedulesFromRow(row, user).map(([key, schedule]) => (
-                      <Chip
-                        key={schedule.unit}
-                        sx={{ mr: 1 }}
-                        variant="outlined"
-                        label={formatSchedule(key, schedule)}
-                      />
-                    ))}
+                    {getSchedulesFromRow(row, user).map(([key, schedule]) =>
+                      getFormattedChip(key, schedule, row.date as string)
+                    )}
                   </TableCell>
                 ))}
               </TableRow>
