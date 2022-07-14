@@ -23,8 +23,11 @@ const ChallengesTable: FC = () => {
   }
 
   const onRowClick = (challenge: Challenge) => {
-    const { challenge_id } = challenge;
-    router.push(`/challenge/${challenge_id}`);
+    const { challenge_id, title } = challenge;
+    router.push({
+      pathname: `/challenge/${challenge_id}`,
+      query: { title: title }
+    })
   };
 
   return (
@@ -35,7 +38,7 @@ const ChallengesTable: FC = () => {
             <TableCell>Id</TableCell>
             <TableCell>Title</TableCell>
             <TableCell>Start date</TableCell>
-            <TableCell>Start end</TableCell>
+            <TableCell>End date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

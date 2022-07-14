@@ -19,7 +19,7 @@ import ChallengeSummaryTable from "../../src/components/challengeSummaryTable/Ch
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, title } = router.query;
   const challenge_id = parseInt(Array.isArray(id) ? id.join("") : id || "");
 
   const { getChallengeById } = useChallengesClient();
@@ -57,7 +57,7 @@ const Home: NextPage = () => {
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box sx={{ flex: 1 }}>
           <Typography variant="h2" gutterBottom component="div">
-            Challenge {id}
+            {title}
           </Typography>
         </Box>
         <LoadingButton
