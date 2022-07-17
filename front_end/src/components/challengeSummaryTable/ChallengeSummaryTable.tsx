@@ -5,9 +5,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Typography,
-  Chip,
-  Box
+  Chip
 } from "@mui/material";
 import React, { FC } from "react";
 import { useAsync } from "react-use";
@@ -17,6 +15,7 @@ import {
   SummaryDataUserShape,
   useChallengesClient
 } from "../../clients/challenges";
+import { isSameDate } from "../../utils/date";
 
 type Props = {
   challenge_id: number;
@@ -82,6 +81,15 @@ const ChallengeSummaryTable: FC<Props> = ({ challenge_id, trigger }) => {
     return <Chip {...props} />;
   };
 
+  const getRowStyle = (dateString: string) => {
+    if (isSameDate(new Date(dateString), new Date())) {
+      return {
+        backgroundColor: "rgba(0, 0, 0, 0.04)"
+      };
+    }
+    return {};
+  };
+
   if (!Array.isArray(value?.body)) {
     return null;
   }
@@ -99,7 +107,10 @@ const ChallengeSummaryTable: FC<Props> = ({ challenge_id, trigger }) => {
           </TableHead>
           <TableBody>
             {value?.body?.map((row) => (
-              <TableRow key={row.date.toString()}>
+              <TableRow
+                key={row.date.toString()}
+                style={getRowStyle(row.date as string)}
+              >
                 <TableCell>
                   <strong>{String(row.date)}</strong>
                 </TableCell>
