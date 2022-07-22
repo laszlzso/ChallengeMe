@@ -54,22 +54,23 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="h2" gutterBottom component="div">
+      <Box>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="h2" gutterBottom component="div" noWrap>
             {title}
           </Typography>
         </Box>
-        <LoadingButton
-          onClick={handleEditChallenge}
-          endIcon={<SendIcon />}
-          loading={editLoading}
-          loadingPosition="end"
-          variant="contained"
-        >
-          Edit Challenge
-        </LoadingButton>
       </Box>
+
+      <LoadingButton
+        onClick={handleEditChallenge}
+        endIcon={<SendIcon />}
+        loading={editLoading}
+        loadingPosition="end"
+        variant="contained"
+      >
+        Edit Challenge
+      </LoadingButton>
 
       <Box
         sx={{

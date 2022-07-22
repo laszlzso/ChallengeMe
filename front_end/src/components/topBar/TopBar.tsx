@@ -1,50 +1,79 @@
-import { Box, Button } from "@mui/material";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+  Typography
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import React from "react";
 import { useAuthContext } from "../authProvider/AuthProvider";
 
+const pages = ["Challenges"];
+
 const TopBar = () => {
   const { user, logoutUser } = useAuthContext();
+
   return (
-    <nav>
-      <Box
-        sx={{
-          backgroundColor: "primary.light",
-          p: 2
-        }}
-      >
-        {user ? (
-          <>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Box sx={{ "& .MuiButton-root": { mr: 2 } }}>
-                <Link href="/challenges">
-                  <Button variant="contained">Challenges</Button>
-                </Link>
+    <AppBar position="static" sx={{ mb: { xs: 2, md: 3 } }}>
+      <Container maxWidth="lg">
+        <Toolbar disableGutters>
+          {user ? (
+            <>
+              <Box sx={{ flexGrow: 1, display: { xs: "flex" } }}>
+                {pages.map((page) => (
+                  <Link key={page} href={`/${page?.toLocaleLowerCase()}`}>
+                    <Button
+                      sx={{ my: 2, color: "white", display: "inline-block" }}
+                    >
+                      {page}
+                    </Button>
+                  </Link>
+                ))}
               </Box>
-              <Box sx={{ "& .MuiButton-root": { ml: 2 } }}>
-                <Button variant="contained" onClick={logoutUser}>
+              <Box sx={{ flexGrow: 0 }}>
+                <Button
+                  sx={{ my: 2, color: "white", display: "inline-block" }}
+                  onClick={logoutUser}
+                >
                   Logout
                 </Button>
+                {/* <IconButton sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton> */}
               </Box>
-            </Box>
-          </>
-        ) : (
-          <>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Box sx={{ "& .MuiButton-root": { mr: 2 } }}></Box>
-              <Box sx={{ "& .MuiButton-root": { ml: 2 } }}>
+            </>
+          ) : (
+            <>
+              <Box sx={{ flexGrow: 1, display: { xs: "flex" } }}></Box>
+              <Box sx={{ flexGrow: 0 }}>
                 <Link href="/login">
-                  <Button variant="contained">Login</Button>
+                  <Button
+                    sx={{ my: 2, color: "white", display: "inline-block" }}
+                  >
+                    Login
+                  </Button>
                 </Link>
                 <Link href="/register">
-                  <Button variant="contained">Register</Button>
+                  <Button
+                    sx={{ my: 2, color: "white", display: "inline-block" }}
+                  >
+                    Register
+                  </Button>
                 </Link>
               </Box>
-            </Box>
-          </>
-        )}
-      </Box>
-    </nav>
+            </>
+          )}
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 

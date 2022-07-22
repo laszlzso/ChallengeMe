@@ -7,11 +7,9 @@ import { Container, Box } from "@mui/material";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <Container maxWidth="md">
-        <TopBar />
-        <Box sx={{ m: 2 }}>
-          <Component {...pageProps} />
-        </Box>
+      <TopBar />
+      <Container maxWidth="lg">
+        <Component {...pageProps} />
       </Container>
     </AuthProvider>
   );
