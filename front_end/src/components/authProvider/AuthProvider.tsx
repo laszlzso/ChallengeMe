@@ -4,7 +4,15 @@ import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { ConstructionOutlined } from "@mui/icons-material";
 
-export type UserShape = { exp: number };
+export type UserShape = {
+  email: string;
+  exp: number;
+  iat: number;
+  jti: string;
+  token_type: string;
+  user_id: number;
+  username: string;
+};
 export type AuthTokensShape = { access?: string; refresh?: string };
 
 export type AuthContextShape = {

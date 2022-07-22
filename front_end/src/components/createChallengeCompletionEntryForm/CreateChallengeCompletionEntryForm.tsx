@@ -42,6 +42,7 @@ import {
   useChallengeCompletionEntryClient
 } from "../../clients/challengeCompletionEntries";
 import { DateTimePicker } from "@mui/x-date-pickers";
+import { useAuthContext } from "../authProvider/AuthProvider";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -64,6 +65,13 @@ type FormData = {
 type Props = {
   challenge_id: number;
   onSuccess: () => void;
+};
+
+const filterSchedulesByUserId = (
+  schedules: ChallengeSchedule[],
+  userId: number
+) => {
+  return schedules.filter((schedule) => schedule.user_id === userId);
 };
 
 export default function CreateChallengeCompletionEntryForm({
@@ -94,10 +102,16 @@ export default function CreateChallengeCompletionEntryForm({
     useChallengeCompletionEntryClient();
   const { getChallengeSchedulesByChallengeId } = useChallengeSchedulesClient();
 
+  const { user } = useAuthContext();
+  const { user_id = -1 } = user || {};
+
   const challengeSchedulesAsync = useAsync(
-    () =>
+    async () =>
       challenge_id
-        ? getChallengeSchedulesByChallengeId(challenge_id)
+        ? filterSchedulesByUserId(
+            await getChallengeSchedulesByChallengeId(challenge_id),
+            user_id
+          )
         : Promise.resolve(),
     [challenge_id]
   );

@@ -25,15 +25,15 @@ const CreateAndDisplayChallengeCompletionEntries: FC<Props> = ({
   return (
     <>
       <Box sx={{ mt: 3 }}>
-        <ChallengeCompletionEntriesTable
-          challenge_id={challenge_id}
-          trigger={loadCompletionEntriesTrigger}
-        />
-      </Box>
-      <Box sx={{ mt: 3 }}>
         <CreateChallengeCompletionEntryForm
           challenge_id={challenge_id}
           onSuccess={handleCompletionEntryCreation}
+        />
+      </Box>
+      <Box sx={{ mt: 3 }}>
+        <ChallengeCompletionEntriesTable
+          challenge_id={challenge_id}
+          trigger={loadCompletionEntriesTrigger}
         />
       </Box>
     </>
