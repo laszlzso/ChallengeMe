@@ -50,9 +50,7 @@ const Home: NextPage = () => {
         challenge={challenge}
       />
       {challenge && (
-        <CreateAndDisplayChallengeSchedules
-          challenge_id={challenge?.challenge_id}
-        />
+        <CreateAndDisplayChallengeSchedules challenge={challenge} />
       )}
     </>
   );

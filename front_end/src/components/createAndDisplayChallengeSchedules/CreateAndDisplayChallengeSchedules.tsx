@@ -1,13 +1,14 @@
 import { Box } from "@mui/material";
 import React, { FC, useState } from "react";
+import { Challenge } from "../../clients/challenges";
 import ChallengeSchedulesTable from "../challengeSchedulesTable/ChallengeSchedulesTable";
 import CreateChallengeScheduleForm from "../createChallengeScheduleForm/CreateChallengeScheduleForm";
 
 type Props = {
-  challenge_id: number;
+  challenge: Challenge;
 };
 
-const CreateAndDisplayChallengeSchedules: FC<Props> = ({ challenge_id }) => {
+const CreateAndDisplayChallengeSchedules: FC<Props> = ({ challenge }) => {
   const [loadSchedulesTrigger, setLoadSchedulesTrigger] = useState<number>(
     Date.now()
   );
@@ -20,13 +21,13 @@ const CreateAndDisplayChallengeSchedules: FC<Props> = ({ challenge_id }) => {
     <>
       <Box sx={{ mt: 3 }}>
         <CreateChallengeScheduleForm
-          challenge_id={challenge_id}
+          challenge={challenge}
           onSuccess={handleScheduleCreation}
         />
       </Box>
       <Box sx={{ mt: 3 }}>
         <ChallengeSchedulesTable
-          challenge_id={challenge_id}
+          challenge={challenge}
           trigger={loadSchedulesTrigger}
         />
       </Box>

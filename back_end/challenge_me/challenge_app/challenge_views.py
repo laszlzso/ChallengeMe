@@ -174,10 +174,8 @@ class ChallengeSummaryApiView(APIView):
 
             # Basic data: no. of days FROM schedule start date TO challenge end date
             no_of_days = (challenge.end_date - schedule.start_date).days + 1
-            # Target per day based on the total number of days available in the schedule/day frequency + the total goal:
-            target_per_day = schedule.total_goal / math.ceil(no_of_days / schedule.day_frequency)
-            logger.debug('%s %s %s %s %s %s', username, schedule.start_date, schedule.day_frequency, no_of_days,
-                         schedule.total_goal, target_per_day)
+            logger.debug('%s %s %s %s %s', username, schedule.start_date, schedule.day_frequency, no_of_days,
+                         schedule.daily_goal)
 
             # Adding the target entries based on the day frequency:
             date_delta = timedelta(days=schedule.day_frequency)
@@ -186,7 +184,7 @@ class ChallengeSummaryApiView(APIView):
                 d_str = str(d)
                 if ch_type not in date_entries[d_str][username]:
                     date_entries[d_str][username][ch_type] = OrderedDict()
-                date_entries[d_str][username][ch_type]['target'] = target_per_day
+                date_entries[d_str][username][ch_type]['target'] = schedule.daily_goal
                 date_entries[d_str][username][ch_type]['unit'] = schedule.challenge_type_id.unit
                 d = d + date_delta
 
