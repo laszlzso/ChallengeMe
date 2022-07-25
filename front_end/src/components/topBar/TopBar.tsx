@@ -1,6 +1,5 @@
 import {
   AppBar,
-  Avatar,
   Box,
   Button,
   Container,
@@ -15,6 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import React from "react";
 import { useAuthContext } from "../authProvider/AuthProvider";
+import Avatar from "../avatar/Avatar";
 
 const pages = ["Challenges"];
 
@@ -27,28 +27,31 @@ const TopBar = () => {
         <Toolbar disableGutters>
           {user ? (
             <>
-              <Box sx={{ flexGrow: 1, display: { xs: "flex" } }}>
-                {pages.map((page) => (
-                  <Link key={page} href={`/${page?.toLocaleLowerCase()}`}>
-                    <Button
-                      sx={{ my: 2, color: "white", display: "inline-block" }}
-                    >
-                      {page}
-                    </Button>
-                  </Link>
-                ))}
-              </Box>
-              <Box sx={{ flexGrow: 0 }}>
-                <Button
-                  sx={{ my: 2, color: "white", display: "inline-block" }}
-                  onClick={logoutUser}
-                >
-                  Logout
-                </Button>
-                {/* <IconButton sx={{ p: 0 }}>
+              {pages.map((page) => (
+                <Link key={page} href={`/${page?.toLocaleLowerCase()}`}>
+                  <Button
+                    sx={{ my: 2, color: "white", display: "inline-block" }}
+                  >
+                    {page}
+                  </Button>
+                </Link>
+              ))}
+              <Box sx={{ flexGrow: 1, alignSelf: "flex-end" }}></Box>
+              <Button
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "inline-block",
+                  mr: 2
+                }}
+                onClick={logoutUser}
+              >
+                Logout
+              </Button>
+              <Avatar />
+              {/* <IconButton sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 </IconButton> */}
-              </Box>
             </>
           ) : (
             <>

@@ -9,7 +9,12 @@ const nextConfig = {
         destination: `${process.env.SERVER_URL}/:path*/`,
       },
     ];
-  }
+  },
+  images: {
+    domains: [
+      "mui.com",
+    ],
+  },
 }
 
 module.exports = nextConfig

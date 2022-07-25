@@ -187,13 +187,13 @@ export default function CreateChallengeCompletionEntryForm({
                 />
               )}
             />
-            {/* TODO(ricsi): input field should only allow numbers */}
             <TextField
-              {...register("amount", { required: true, minLength: 2 })}
+              {...register("amount", { required: true, valueAsNumber: true })}
               {...getValidationProps(errors, "amount")}
               fullWidth
               label="Amount"
               variant="standard"
+              type="number"
             />
             <LoadingButton
               onClick={handleSubmit(onSubmit)}

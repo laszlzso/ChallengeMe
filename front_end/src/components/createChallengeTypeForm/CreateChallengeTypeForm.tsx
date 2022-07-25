@@ -79,18 +79,18 @@ export default function CreateChallengeScheduleForm({ onSuccess }: Props) {
         autoComplete="off"
       >
         <TextField
-          {...register("name", { required: true, minLength: 2 })}
+          {...register("name", { required: true, minLength: 1 })}
           {...getValidationProps(errors, "name")}
           fullWidth
-          label="Name"
+          label="Activity name (eg. Running)"
           variant="standard"
         />
         {/* TODO(ricsi): don't allow numbers here! */}
         <TextField
-          {...register("unit", { required: true, minLength: 2 })}
+          {...register("unit", { required: true, minLength: 1 })}
           {...getValidationProps(errors, "unit")}
           fullWidth
-          label="Unit"
+          label="Activity unit (eg. km)"
           variant="standard"
         />
         <LoadingButton
