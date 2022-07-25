@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Box,
@@ -52,7 +52,7 @@ const modalStyle = {
 
 type FormData = {
   challenge_id: number;
-  challenge_type_id?: number;
+  challenge_type_id: number | null;
   daily_goal: number;
   start_date: Date;
   day_frequency: number;
@@ -63,12 +63,14 @@ type Props = {
   onSuccess: () => void;
 };
 
-const mapChallengeTypeToOption = (types: ChallengeType[] = []) =>
-  types?.map?.((type) => ({
-    label: `${type.name} (${type.unit})`,
-    id: type.challenge_type_id,
-    ...type
-  }));
+const mapChallengeTypesToOption = (types: ChallengeType[] = []) =>
+  types?.map?.((type) => mapChallengeTypeToOption(type));
+
+const mapChallengeTypeToOption = (type: ChallengeType) => ({
+  label: `${type?.name} (${type?.unit})`,
+  id: type?.challenge_type_id,
+  ...(type || {})
+});
 
 export default function CreateChallengeScheduleForm({
   challenge,
@@ -88,9 +90,9 @@ export default function CreateChallengeScheduleForm({
   } = useForm<FormData>({
     defaultValues: {
       challenge_id: challenge?.challenge_id,
-      challenge_type_id: undefined,
+      challenge_type_id: null,
       daily_goal: undefined,
-      start_date: new Date(),
+      start_date: new Date(challenge.start_date),
       day_frequency: undefined
     }
   });
@@ -109,6 +111,7 @@ export default function CreateChallengeScheduleForm({
 
   const onSubmit = (data: FormData) => {
     if (!data.challenge_type_id) {
+      setError("challenge_type_id", { type: "required" });
       return;
     }
 
@@ -130,10 +133,12 @@ export default function CreateChallengeScheduleForm({
     setModalOpen(false);
   };
 
-  const findChallengeTypeById = (id?: number) => {
-    return challengeTypesAsync.value?.find(
+  const findChallengeTypeById = (id: number | null) => {
+    const type = challengeTypesAsync.value?.find(
       (type) => type.challenge_type_id === id
     );
+
+    return type ? mapChallengeTypeToOption(type) : null;
   };
 
   return (
@@ -151,12 +156,16 @@ export default function CreateChallengeScheduleForm({
       >
         <FormAlert errors={errors} />
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {/* TODO(ricsi): need to clear Autocomplete on Add schedule success */}
+          {/* TODO(ricsi): Clearing with X doesnt work */}
           <Autocomplete
             sx={{ flex: 1, mr: 2 }}
-            options={mapChallengeTypeToOption(challengeTypesAsync.value)}
+            options={mapChallengeTypesToOption(challengeTypesAsync.value)}
+            value={findChallengeTypeById(getValues("challenge_type_id"))}
             onChange={(event: any, value: ChallengeType | null) => {
-              setValue("challenge_type_id", value?.challenge_type_id);
+              if (value) {
+                clearErrors("challenge_type_id");
+              }
+              setValue("challenge_type_id", value?.challenge_type_id || null);
             }}
             loading={challengeTypesAsync.loading}
             renderInput={(params) => {
@@ -175,13 +184,13 @@ export default function CreateChallengeScheduleForm({
             <AddBoxOutlinedIcon />
           </IconButton>
         </Box>
-        {/* TODO(ricsi): input field should only allow numbers */}
         <TextField
-          {...register("daily_goal", { required: true })}
+          {...register("daily_goal", { required: true, valueAsNumber: true })}
           {...getValidationProps(errors, "daily_goal")}
           fullWidth
           label="Daily goal"
           variant="standard"
+          type="number"
         />
         <Controller
           name="start_date"
@@ -203,13 +212,17 @@ export default function CreateChallengeScheduleForm({
             />
           )}
         />
-        {/* TODO(ricsi): input field should only allow numbers */}
+        {/* TODO(ricsi): validate for positive integer between 1 and 7 */}
         <TextField
-          {...register("day_frequency", { required: true })}
+          {...register("day_frequency", {
+            required: true,
+            valueAsNumber: true
+          })}
           {...getValidationProps(errors, "day_frequency")}
           fullWidth
           label="Day frequency"
           variant="standard"
+          type="number"
         />
         <LoadingButton
           onClick={handleSubmit(onSubmit)}
