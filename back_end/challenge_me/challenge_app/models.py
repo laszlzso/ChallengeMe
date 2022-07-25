@@ -31,7 +31,7 @@ class ChallengeSchedule(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     challenge_type_id = models.ForeignKey(ChallengeType, on_delete=models.CASCADE)
 
-    total_goal = models.FloatField(validators=[MinValueValidator(0.001)])
+    daily_goal = models.FloatField(validators=[MinValueValidator(0.001)])
     start_date = models.DateField()  # TODO(laszlzso): add restriction for Challenge.start_date and end_date
     day_frequency = models.IntegerField(validators=[MinValueValidator(1)])
 
@@ -39,12 +39,12 @@ class ChallengeSchedule(models.Model):
         unique_together = ('challenge_id', 'user_id', 'challenge_type_id')
 
     def __str__(self):
-        return 'Challenge schedule #{}: {}/User {}/{}; goal: {}, freq.: {} ({})'.format(
+        return 'Challenge schedule #{}: {}/User {}/{}; daily goal: {}, freq.: {} ({})'.format(
             self.challenge_schedule_id,
             self.challenge_id,
             self.user_id,
             self.challenge_type_id,
-            self.total_goal,
+            self.daily_goal,
             self.day_frequency,
             self.start_date)
 

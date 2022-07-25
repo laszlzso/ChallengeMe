@@ -31,7 +31,7 @@ class ChallengeScheduleSerializer(serializers.ModelSerializer):
                   'challenge_id',
                   'user_id',
                   'challenge_type_id',
-                  'total_goal',
+                  'daily_goal',
                   'start_date',
                   'day_frequency']
 

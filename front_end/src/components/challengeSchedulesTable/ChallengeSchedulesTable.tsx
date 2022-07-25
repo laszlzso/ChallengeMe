@@ -9,19 +9,19 @@ import {
 } from "@mui/material";
 import React, { FC } from "react";
 import { useAsync } from "react-use";
-import { useChallengesClient } from "../../clients/challenges";
+import { Challenge, useChallengesClient } from "../../clients/challenges";
 import { useChallengeSchedulesClient } from "../../clients/challengeSchedules";
 
 type Props = {
-  challenge_id: number;
+  challenge: Challenge;
   trigger: any;
 };
 
-const ChallengeSchedulesTable: FC<Props> = ({ challenge_id, trigger }) => {
+const ChallengeSchedulesTable: FC<Props> = ({ challenge, trigger }) => {
   const { getChallengeSchedulesByChallengeId } = useChallengeSchedulesClient();
 
   const { loading, error, value } = useAsync(
-    () => getChallengeSchedulesByChallengeId(challenge_id),
+    () => getChallengeSchedulesByChallengeId(challenge.challenge_id),
     [trigger]
   );
 
@@ -42,7 +42,7 @@ const ChallengeSchedulesTable: FC<Props> = ({ challenge_id, trigger }) => {
               <TableCell>Challenge id</TableCell>
               <TableCell>User id</TableCell>
               <TableCell>Challenge type id</TableCell>
-              <TableCell>Total goal</TableCell>
+              <TableCell>Daily goal</TableCell>
               <TableCell>Start date</TableCell>
               <TableCell>Day frequency</TableCell>
             </TableRow>
@@ -56,7 +56,7 @@ const ChallengeSchedulesTable: FC<Props> = ({ challenge_id, trigger }) => {
                 <TableCell>{row.challenge_id}</TableCell>
                 <TableCell>{row.user_id}</TableCell>
                 <TableCell>{row.challenge_type_id}</TableCell>
-                <TableCell>{row.total_goal}</TableCell>
+                <TableCell>{row.daily_goal}</TableCell>
                 <TableCell>{row.start_date}</TableCell>
                 <TableCell>{row.day_frequency}</TableCell>
               </TableRow>

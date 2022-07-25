@@ -36,6 +36,7 @@ import {
 } from "../../clients/challengeSchedules";
 import CreateChallengeTypeForm from "../createChallengeTypeForm/CreateChallengeTypeForm";
 import FormAlert from "../formAlert/FormAlert";
+import { Challenge } from "../../clients/challenges";
 
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -52,13 +53,13 @@ const modalStyle = {
 type FormData = {
   challenge_id: number;
   challenge_type_id?: number;
-  total_goal: number;
+  daily_goal: number;
   start_date: Date;
   day_frequency: number;
 };
 
 type Props = {
-  challenge_id: number;
+  challenge: Challenge;
   onSuccess: () => void;
 };
 
@@ -70,7 +71,7 @@ const mapChallengeTypeToOption = (types: ChallengeType[] = []) =>
   }));
 
 export default function CreateChallengeScheduleForm({
-  challenge_id,
+  challenge,
   onSuccess
 }: Props) {
   const {
@@ -86,9 +87,9 @@ export default function CreateChallengeScheduleForm({
     watch
   } = useForm<FormData>({
     defaultValues: {
-      challenge_id,
+      challenge_id: challenge?.challenge_id,
       challenge_type_id: undefined,
-      total_goal: undefined,
+      daily_goal: undefined,
       start_date: new Date(),
       day_frequency: undefined
     }
@@ -176,10 +177,10 @@ export default function CreateChallengeScheduleForm({
         </Box>
         {/* TODO(ricsi): input field should only allow numbers */}
         <TextField
-          {...register("total_goal", { required: true })}
-          {...getValidationProps(errors, "total_goal")}
+          {...register("daily_goal", { required: true })}
+          {...getValidationProps(errors, "daily_goal")}
           fullWidth
-          label="Total goal"
+          label="Daily goal"
           variant="standard"
         />
         <Controller

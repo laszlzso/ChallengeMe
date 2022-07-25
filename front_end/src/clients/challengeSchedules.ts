@@ -6,17 +6,16 @@ export type ChallengeSchedule = {
   user_id: number;
   challenge_type_id: number;
 
-  total_goal: number;
+  daily_goal: number;
   start_date: string;
   day_frequency: number;
 };
 
 export type NewChallengeScheduleShape = {
   challenge_id: number;
-  user_id: number;
   challenge_type_id: number;
 
-  total_goal: number;
+  daily_goal: number;
   start_date: Date;
   day_frequency: number;
 };
