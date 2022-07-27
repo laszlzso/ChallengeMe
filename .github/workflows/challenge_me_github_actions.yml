@@ -41,7 +41,6 @@ jobs:
           flags: "g"
 
       - name: Deploy to EB
-        if: github.ref == 'refs/heads/main'
         uses: einaregilsson/beanstalk-deploy@v14
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}

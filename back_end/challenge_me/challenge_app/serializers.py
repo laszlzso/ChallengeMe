@@ -3,7 +3,8 @@ from .models import (
     Challenge,
     ChallengeType,
     ChallengeSchedule,
-    ChallengeCompletionEntry
+    ChallengeCompletionEntry,
+    ProfileImage,
 )
 
 
@@ -43,3 +44,10 @@ class ChallengeCompletionEntrySerializer(serializers.ModelSerializer):
                   'challenge_schedule_id',
                   'timestamp',
                   'amount']
+
+
+class ProfileImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileImage
+        fields = ['user_id',
+                  'image']

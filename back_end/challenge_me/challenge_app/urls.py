@@ -20,6 +20,7 @@ from .challenge_completion_entry_views import (
     ChallengeCompletionEntryListApiView,
     ChallengeCompletionEntryApiView,
 )
+from .profile_views import ProfileImageListApiView
 
 urlpatterns = [
     path('challenges/', ChallengeListApiView.as_view()),
@@ -33,4 +34,5 @@ urlpatterns = [
     path('challenge-schedules/<int:challenge_schedule_id>/', ChallengeScheduleApiView.as_view()),
     path('challenge-completion-entries/', ChallengeCompletionEntryListApiView.as_view()),
     path('challenge-completion-entries/<int:challenge_completion_entry_id>/', ChallengeCompletionEntryApiView.as_view()),
+    path('profile/images/', ProfileImageListApiView.as_view()),
 ]
