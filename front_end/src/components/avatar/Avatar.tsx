@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useAuthContext } from "../authProvider/AuthProvider";
 import Image from "next/image";
+import { useProfileClient } from "../../clients/profiles";
 
 const settings = ["Profile", "Logout"];
 
@@ -32,6 +33,7 @@ const style = {
 
 const Avatar: FC = () => {
   const { user, logoutUser } = useAuthContext();
+  const { uploadProfileImage } = useProfileClient();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
@@ -53,8 +55,8 @@ const Avatar: FC = () => {
   };
 
   const handleFileSelected = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(event);
-    debugger;
+    // @ts-ignore
+    uploadProfileImage(event?.target?.files?.[0]);
   };
 
   return (
@@ -106,6 +108,7 @@ const Avatar: FC = () => {
             <Button variant="contained" component="label">
               Upload
               <input
+                // @ts-ignore
                 onChange={handleFileSelected}
                 hidden
                 accept="image/*"

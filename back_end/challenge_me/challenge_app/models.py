@@ -61,3 +61,8 @@ class ChallengeCompletionEntry(models.Model):
                                                           self.challenge_schedule_id,
                                                           self.amount,
                                                           self.timestamp)
+
+
+class ProfileImage(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.FileField()
