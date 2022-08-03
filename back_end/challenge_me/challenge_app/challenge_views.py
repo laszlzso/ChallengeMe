@@ -1,6 +1,7 @@
 import math
-from collections import OrderedDict
+import json
 import logging
+from collections import OrderedDict
 from datetime import datetime, timedelta
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -166,6 +167,10 @@ class ChallengeSummaryApiView(APIView):
             for _, name in users.items():
                 date_entries[date_str][name] = OrderedDict()
 
+        date_entries['Total'] = OrderedDict()
+        for _, name in users.items():
+            date_entries['Total'][name] = OrderedDict()
+
         logger.debug('Date entries: %s', date_entries)
 
         for schedule in challenge_schedules:
@@ -189,6 +194,7 @@ class ChallengeSummaryApiView(APIView):
                 d = d + date_delta
 
             # Adding the completion entries:
+            total_completion = 0
             completion_entries = ChallengeCompletionEntry.objects.filter(challenge_schedule_id=schedule)
             for entry in completion_entries:
                 date_str = str(entry.timestamp.date())
@@ -199,13 +205,19 @@ class ChallengeSummaryApiView(APIView):
                     date_entries[date_str][username][ch_type]['completed'] = 0.0
                 current = date_entries[date_str][username][ch_type]['completed']
                 date_entries[date_str][username][ch_type]['completed'] = current + entry.amount
+                total_completion = total_completion + entry.amount
 
-        logger.debug('Date entries: %s', date_entries)
+            total_dict = OrderedDict([('target', schedule.daily_goal * math.ceil(no_of_days / schedule.day_frequency)),
+                                      ('unit', schedule.challenge_type_id.unit),
+                                      ('completed', total_completion)])
+            date_entries['Total'][username][ch_type] = total_dict
+
+        logger.debug('Date entries: %s', json.dumps(date_entries, indent=2))
 
         for date_str, value in date_entries.items():
             value['date'] = date_str
             result['body'].append(value)
 
-        logger.debug('Result: %s', result)
+        logger.debug('Result: %s', json.dumps(result, indent=2))
 
         return Response(result, status=status.HTTP_200_OK)

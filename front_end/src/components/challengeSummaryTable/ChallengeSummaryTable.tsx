@@ -66,7 +66,12 @@ const ChallengeSummaryTable: FC<Props> = ({ challenge_id, trigger }) => {
       color: "default" as any
     };
 
-    if (new Date(dateString) <= new Date()) {
+    const isTotalRow = "Total" == dateString;
+    if (isTotalRow) {
+      props.size = "medium";
+    }
+
+    if (isTotalRow || new Date(dateString) <= new Date()) {
       props.variant = "filled";
     }
 
@@ -85,6 +90,10 @@ const ChallengeSummaryTable: FC<Props> = ({ challenge_id, trigger }) => {
     if (isSameDate(new Date(dateString), new Date())) {
       return {
         backgroundColor: "rgba(0, 0, 0, 0.04)"
+      };
+    } else if ("Total" == dateString) {
+      return {
+        backgroundColor: "rgba(64,224,208, 0.5)"
       };
     }
     return {};
