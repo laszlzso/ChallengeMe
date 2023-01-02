@@ -15,6 +15,7 @@ services:
       - challengemedb_pwd=${challengemedb_pwd}
       - challengemedb_url=${challengemedb_url}
       - challengemedb_port=${challengemedb_port}
+      - django_secret_key=${django_secret_key}
 
   frontend:
     container_name: frontendx
